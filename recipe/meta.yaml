@@ -16,7 +16,7 @@ source:
     - patches/0003-Disable-whole-program-optimization-VS2010.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win and py35]
   features:
     - vc9   # [win and py27]
