@@ -1,0 +1,12 @@
+diff -Naur a/build/VS2008/zstd.sln b/build/VS2008/zstd.sln
+--- a/build/VS2008/zstd.sln	2018-01-01 22:48:40.362120900 +0000
++++ b/build/VS2008/zstd.sln	2018-01-01 22:45:29.550790000 +0000
+@@ -7,8 +7,6 @@
+ EndProject
+ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "fullbench", "fullbench\fullbench.vcproj", "{CC8F1D1B-BA2F-43E3-A71F-FA415D81AAD3}"
+ EndProject
+-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "zstdlib", "zstdlib\zstdlib.vcproj", "{99DE2A79-7298-4004-A0ED-030D7A3796CA}"
+-EndProject
+ Global
+ 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+ 		Debug|Win32 = Debug|Win32

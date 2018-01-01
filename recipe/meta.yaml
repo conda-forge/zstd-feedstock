@@ -14,6 +14,7 @@ source:
     - patches/0001-Fix-VS2008-solution-format-version.patch         # [win]
     - patches/0002-Fix-order-of-building-for-VS2010.patch           # [win]
     - patches/0003-Disable-whole-program-optimization-VS2010.patch  # [win]
+    - patches/0004-Remove-zstdlib-project-from-VS2008.patch         # [win]
 
 build:
   number: 1
