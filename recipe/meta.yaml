@@ -14,24 +14,25 @@ source:
     - patches/0001-Fix-VS2008-solution-format-version.patch           # [win]
     - patches/0002-Fix-order-of-building-for-VS2010.patch             # [win]
     - patches/0003-Disable-whole-program-optimization-VS2010.patch    # [win]
-    - patches/0004-Rename-zstdlib-to-libzstd-internally-VS2008.patch  # [win]
+    # - patches/0004-Rename-zstdlib-to-libzstd-internally-VS2008.patch  # [win]
 
 build:
   number: 0
-  skip: True  # [win and py35]
-  features:
-    - vc9   # [win and py27]
-    - vc14  # [win and py36]
+  run_exports:
+    # pretty bad removal of symbols in every other micro release:
+    #   https://abi-laboratory.pro/tracker/timeline/zstd/
+    - {{ pin_subpackage('zstd', max_pin='x.x.x') }}
 
 requirements:
   build:
-    - toolchain   # [unix]
-    - python      # [win]
-    - msinttypes  # [win and py27]
+    - {{ compiler('c') }}
+    - msinttypes  # [win and vc<14]
+    - make   # [unix]
+  host:
+    - zlib
 
 test:
   requires:
-    - python      # [win]
     - pkg-config  # [unix]
 
   commands:
@@ -71,3 +72,4 @@ about:
 extra:
   recipe-maintainers:
     - rmax
+    - msarahan
