@@ -17,17 +17,14 @@ source:
     - patches/0004-Rename-zstdlib-to-libzstd-internally-VS2008.patch  # [win]
 
 build:
-  number: 0
-  skip: True  # [win and py35]
-  features:
-    - vc9   # [win and py27]
-    - vc14  # [win and py36]
+  number: 1
 
 requirements:
   build:
-    - toolchain   # [unix]
-    - python      # [win]
-    - msinttypes  # [win and py27]
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+  host:
+    - msinttypes  # [win and vc<14]
 
 test:
   requires:
@@ -46,7 +43,7 @@ test:
     - if not exist %LIBRARY_LIB%\lib{{ name }}.def exit 1         # [win]
     - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and not py27]
+    - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and not vc<14]
 
     - PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig pkg-config --cflags lib{{ name }}  # [unix]
 
