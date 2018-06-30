@@ -47,8 +47,8 @@ if "%VS_YEAR%" == "2015" (
   copy %OUTPUT_DIR%\libzstd_static.lib %LIBRARY_LIB% || exit 1
 )
 if "%VS_YEAR%" == "2008" (
-  copy %OUTPUT_DIR%\libzstd.dll %LIBRARY_BIN%\libzstd.dll || exit 1
-  copy %OUTPUT_DIR%\libzstd.lib %LIBRARY_LIB%\libzstd.lib || exit 1
+  copy %OUTPUT_DIR%\zstdlib.dll %LIBRARY_BIN%\zstdlib.dll || exit 1
+  copy %OUTPUT_DIR%\zstdlib.lib %LIBRARY_LIB%\zstdlib.lib || exit 1
 )
 
 copy %SRC_DIR%\lib\dll\libzstd.def %LIBRARY_LIB% || exit 1

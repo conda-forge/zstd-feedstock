@@ -20,14 +20,16 @@ a BSD license.
 Current build status
 ====================
 
-Linux: [![Circle CI](https://circleci.com/gh/conda-forge/zstd-feedstock.svg?style=shield)](https://circleci.com/gh/conda-forge/zstd-feedstock)
-OSX: [![TravisCI](https://travis-ci.org/conda-forge/zstd-feedstock.svg?branch=master)](https://travis-ci.org/conda-forge/zstd-feedstock)
-Windows: [![AppVeyor](https://ci.appveyor.com/api/projects/status/github/conda-forge/zstd-feedstock?svg=True)](https://ci.appveyor.com/project/conda-forge/zstd-feedstock/branch/master)
+[![Linux](https://img.shields.io/circleci/project/github/conda-forge/zstd-feedstock/master.svg?label=Linux)](https://circleci.com/gh/conda-forge/zstd-feedstock)
+[![OSX](https://img.shields.io/travis/conda-forge/zstd-feedstock/master.svg?label=macOS)](https://travis-ci.org/conda-forge/zstd-feedstock)
+[![Windows](https://img.shields.io/appveyor/ci/conda-forge/zstd-feedstock/master.svg?label=Windows)](https://ci.appveyor.com/project/conda-forge/zstd-feedstock/branch/master)
 
 Current release info
 ====================
-Version: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/zstd/badges/version.svg)](https://anaconda.org/conda-forge/zstd)
-Downloads: [![Anaconda-Server Badge](https://anaconda.org/conda-forge/zstd/badges/downloads.svg)](https://anaconda.org/conda-forge/zstd)
+
+| Name | Downloads | Version | Platforms |
+| --- | --- | --- | --- |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-zstd-green.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) |
 
 Installing zstd
 ===============
