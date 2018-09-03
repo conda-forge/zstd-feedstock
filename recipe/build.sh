@@ -11,6 +11,8 @@ fi
 
 # Build
 make -j$CPU_COUNT
+make -j$CPU_COUNT -C contrib/pzstd all
 
 # Install
 make install PREFIX=$PREFIX
+make -C contrib/pzstd install PREFIX=$PREFIX

@@ -17,7 +17,7 @@ source:
     - patches/0004-Rename-zstdlib-to-libzstd-internally-VS2008.patch  # [win]
 
 build:
-  number: 0
+  number: 1
   skip: True  # [win and py35]
   features:
     - vc9   # [win and py27]
@@ -36,6 +36,7 @@ test:
 
   commands:
     - zstd -be -i5
+    - pzstd --version 2> /dev/null  # [unix]
 
     - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
     - test -f ${PREFIX}/lib/lib{{ name }}.a      # [unix]
