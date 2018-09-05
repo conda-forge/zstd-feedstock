@@ -17,7 +17,7 @@ source:
     - patches/0004-Rename-zstdlib-to-libzstd-internally-VS2008.patch  # [win]
 
 build:
-  number: 1
+  number: 1001
   skip: True  # [win and py35]
   features:
     - vc9   # [win and py27]
