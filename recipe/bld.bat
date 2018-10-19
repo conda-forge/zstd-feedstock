@@ -1,49 +1,26 @@
-:: Configure
-set CONF=Release
-if "%ARCH%" == "64" (
-  set ARCH=x64
-) else (
-  set ARCH=Win32
-)
+pushd build\cmake
 
-set SLN_FILE=zstd.sln
-if "%VS_YEAR%" == "2008" goto skip_2015
-  set TOOLSET=v140
-  set SLN_DIR=%SRC_DIR%\build\VS2010
-  set OUTPUT_DIR=%SRC_DIR%\build\VS2010\bin\%ARCH%_%CONF%
-  cd %SLN_DIR% || exit 1
-  call devenv %SLN_FILE% /Upgrade
+cmake -G"%CMAKE_GENERATOR%"                      ^
+      -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"  ^
+      -DCMAKE_BUILD_TYPE=Release                 ^
+      -DCMAKE_C_FLAGS_RELEASE="%CFLAGS% -I"      ^
+      -DCMAKE_CXX_FLAGS_RELEASE="%CXXFLAGS%"     ^
+      -DCMAKE_VERBOSE_MAKEFILE=On                ^
+      .
+
+:: Build.
+if "%c_compiler%" == "vs2008" goto skip_2015
+  cmake --build . --config Release -- -verbosity:detailed
+  if not errorlevel 0 exit 1
+  cmake --build . --config Release --target install -- -verbosity:detailed
+  if not errorlevel 0 exit 1
   goto skip_2008
 :skip_2015
-  set TOOLSET=v90
-  set SLN_DIR=%SRC_DIR%\build\VS2008
-  set OUTPUT_DIR=%SRC_DIR%\build\VS2008\bin\%ARCH%\%CONF%
-  cd %SLN_DIR% || exit 1
+  cmake --build . --config Release --target install
+  if not errorlevel 0 exit 1
 :skip_2008
 
-if "%VS_YEAR%" == "" (
-  echo Unknown VS version
-  exit 1
-)
-
-:: Build
-msbuild %SLN_FILE% ^
-  /t:Build /v:minimal ^
-  /p:Configuration=%CONF% ^
-  /p:Platform=%ARCH% ^
-  /p:PlatformToolset=%TOOLSET% ^
-  /p:SolutionDir=%SLN_DIR%\ ^
-  /p:OutDir=%OUTPUT_DIR%\
-if errorlevel 1 exit 1
-
-dir /s /b
-
-:: Install
-copy %OUTPUT_DIR%\zstd.exe %LIBRARY_BIN% || exit 1
-
-copy %OUTPUT_DIR%\libzstd.dll %LIBRARY_BIN% || exit 1
-copy %OUTPUT_DIR%\libzstd.lib %LIBRARY_LIB% || exit 1
-if exist %OUTPUT_DIR%\libzstd_static.lib copy %OUTPUT_DIR%\libzstd_static.lib %LIBRARY_LIB% || exit 1
-
-copy %SRC_DIR%\lib\dll\libzstd.def %LIBRARY_LIB% || exit 1
-copy %SRC_DIR%\lib\zstd.h %LIBRARY_INC% || exit 1
+:: Not working since switching from jom to vc generator.
+:: Test.
+:: ctest -C Release
+::  if not errorlevel 0 exit 1

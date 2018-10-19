@@ -7,14 +7,16 @@ package:
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256hash }}
+#  git_url: ~/conda/zstd
+#  git_url: C:/Users/builder/conda/zstd
   patches:
     - patches/0001-Fix-VS2008-solution-format-version.patch
     - patches/0002-Fix-order-of-building-for-VS2010.patch
-    - patches/0003-Disable-whole-program-optimization-VS2010.patch
-    - patches/0006-Rename-VS2008-zstdlib-to-libzstd.patch
+    - patches/0003-VS2010-sln-Disable-whole-program-optimization.patch
+    - patches/0004-VS2008-sln-Rename-zstdlib-to-libzstd.patch
+    - patches/0005-CMake-Fix-windres-.rc-not-including-programs-windres.patch
 
 build:
   number: 1
@@ -26,27 +28,26 @@ build:
 requirements:
   build:
     - {{ compiler('c') }}
+    - {{ compiler('cxx') }}  # [linux]
     - msinttypes  # [win and vc<14]
     - make   # [unix]
+    - cmake
   host:
     - zlib
     - xz
     - lz4
 
-test:
-  requires:
+test:             # [unix]
+  requires:       # [unix]
     - pkg-config  # [unix]
 
   commands:
     - zstd -be -i5
-
     - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
     - test -f ${PREFIX}/lib/lib{{ name }}.a      # [unix]
     - test -f ${PREFIX}/lib/lib{{ name }}.so     # [linux]
     - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
-
     - if not exist %LIBRARY_INC%\{{ name }}.h exit 1              # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}.def exit 1         # [win]
     - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and not py27]
@@ -56,6 +57,7 @@ test:
 about:
   home: http://www.zstd.net
   license: BSD 3-Clause
+  license_family: BSD
   license_file: LICENSE
   summary: "Zstandard - Fast real-time compression algorithm"
   description: |
@@ -72,3 +74,4 @@ extra:
   recipe-maintainers:
     - rmax
     - msarahan
+

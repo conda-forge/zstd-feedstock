@@ -1,7 +1,7 @@
-From 97510955b80a439953e3208693af58793138ae82 Mon Sep 17 00:00:00 2001
+From 028d8fa673113aeb1b9a08761e664d19a12643c2 Mon Sep 17 00:00:00 2001
 From: Rolando Espinoza <rndmax84@gmail.com>
 Date: Mon, 13 Mar 2017 17:33:05 -0300
-Subject: [PATCH 2/2] Fix order of building for VS2010
+Subject: [PATCH 2/5] Fix order of building for VS2010
 
 Fullbench-dll depends on the libzstd but this is not handled
 automatically by MSBuild.
@@ -10,7 +10,7 @@ automatically by MSBuild.
  1 file changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/build/VS2010/zstd.sln b/build/VS2010/zstd.sln
-index 12032db..f1bd310 100644
+index 12032db4..f1bd3103 100644
 --- a/build/VS2010/zstd.sln
 +++ b/build/VS2010/zstd.sln
 @@ -42,22 +42,6 @@ Global
@@ -60,5 +60,5 @@ index 12032db..f1bd310 100644
  	GlobalSection(SolutionProperties) = preSolution
  		HideSolutionNode = FALSE
 -- 
-2.6.2
+2.19.1
 
