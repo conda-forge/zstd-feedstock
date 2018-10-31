@@ -57,6 +57,7 @@ test:
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and not py27]
 
+    - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
     - pkg-config --cflags lib{{ name }}  # [unix]
 
 about:
