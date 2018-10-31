@@ -34,7 +34,7 @@ requirements:
     - zlib
     - xz
     - lz4
-  build:
+  run:
     - zlib
     - xz
     - lz4
