@@ -29,6 +29,7 @@ requirements:
     - {{ compiler('cxx') }}
     - msinttypes  # [win and vc<14]
     - make   # [unix]
+    - cmake
   host:
     - zlib
     - xz
