@@ -45,7 +45,7 @@ test:
 
   commands:
     - zstd -be -i5
-    
+
     - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
     - test -f ${PREFIX}/lib/lib{{ name }}.a      # [unix]
     - test -f ${PREFIX}/lib/lib{{ name }}.so     # [linux]
@@ -55,7 +55,7 @@ test:
     - if not exist %LIBRARY_LIB%\lib{{ name }}.def exit 1         # [win]
     - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and not py27]
+    - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and vc>=14]
 
     - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
     - test -f ${PREFIX}/lib/pkgconfig/lib{{ name }}.pc  # [unix]
