@@ -39,10 +39,10 @@ if [[ ${CMAKE_BUILD} == yes ]]; then
 
   pushd build/cmake
 
-    cmake -G"${CMAKE_GENERATOR}"                  \
-          -DCMAKE_INSTALL_PREFIX="${PREFIX}"      \
-          -DCMAKE_INSTALL_LIBDIR="${PREFIX}/lib"  \
-          -DCMAKE_PREFIX_PATH="${PREFIX}"         \
+    cmake -G"${CMAKE_GENERATOR}"             \
+          -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
+          -DCMAKE_INSTALL_LIBDIR="lib"       \
+          -DCMAKE_PREFIX_PATH="${PREFIX}"    \
           "${_CMAKE_EXTRA_CONFIG[@]}"
 
     make -j${CPU_COUNT}
