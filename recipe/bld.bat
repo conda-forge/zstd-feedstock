@@ -11,7 +11,6 @@ cmake -G"%CMAKE_GENERATOR%"                      ^
       -DCMAKE_C_FLAGS_RELEASE="%CFLAGS%"         ^
       -DCMAKE_CXX_FLAGS_RELEASE="%CXXFLAGS%"     ^
       -DCMAKE_VERBOSE_MAKEFILE=On                ^
-      --debug-trycompile -Wdev --debug-output --trace  ^
       .
 if %errorlevel% neq 0 exit /b 1
 
