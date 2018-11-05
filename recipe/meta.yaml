@@ -10,7 +10,6 @@ source:
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256hash }}
   patches:
-    - patches/0001-Fix-VS2008-solution-format-version.patch
     - patches/0002-Fix-order-of-building-for-VS2010.patch
     - patches/0003-VS2010-sln-Disable-whole-program-optimization.patch
     - patches/0004-VS2008-sln-Rename-zstdlib-to-libzstd.patch
@@ -33,6 +32,7 @@ requirements:
     - msinttypes  # [win and vc<14]
     - make   # [unix]
     - cmake
+    - m2-patch  # [win]
   host:
     - zlib
     - xz
