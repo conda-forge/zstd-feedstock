@@ -10,9 +10,6 @@ source:
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
   sha256: {{ sha256hash }}
   patches:
-    - patches/0002-Fix-order-of-building-for-VS2010.patch
-    - patches/0003-VS2010-sln-Disable-whole-program-optimization.patch
-    - patches/0004-VS2008-sln-Rename-zstdlib-to-libzstd.patch
     - patches/0005-CMake-Fix-windres-.rc-not-including-programs-windres.patch
     # Causes linking errors due to benchmarking not beging built into the shared library on
     # Windows (or it may be there are some missing __declspec(dllexport) in the shared library?)
