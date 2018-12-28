@@ -1,6 +1,5 @@
 {% set name = "zstd" %}
 {% set version = "1.3.8" %}
-{% set sha256hash = "3277f236df0ca6edae01ae84e865470000c5a3484588fd5bc3d869877fd3573d" %}
 
 package:
   name: {{ name|lower }}
@@ -9,7 +8,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: {{ sha256hash }}
+  sha256: 37064928a6577c1045064523c76e11f467288b0cc877b71ee03f71d7a3dad70e
   patches:
     - patches/0001-Fix-VS2008-solution-format-version.patch          # [win]
     - patches/0002-Fix-order-of-building-for-VS2010.patch            # [win]
