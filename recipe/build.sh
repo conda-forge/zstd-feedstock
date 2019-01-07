@@ -39,11 +39,12 @@ if [[ ${CMAKE_BUILD} == yes ]]; then
 
   pushd build/cmake
 
+    FULL_AR=`which ${AR}`
     cmake -G"${CMAKE_GENERATOR}"             \
           -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
           -DCMAKE_INSTALL_LIBDIR="lib"       \
           -DCMAKE_PREFIX_PATH="${PREFIX}"    \
-          -DCMAKE_AR=${AR}                   \
+          -DCMAKE_AR=${FULL_AR}                   \
           "${_CMAKE_EXTRA_CONFIG[@]}"
 
     make -j${CPU_COUNT}
