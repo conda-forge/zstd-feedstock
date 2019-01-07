@@ -44,7 +44,7 @@ if [[ ${CMAKE_BUILD} == yes ]]; then
           -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
           -DCMAKE_INSTALL_LIBDIR="lib"       \
           -DCMAKE_PREFIX_PATH="${PREFIX}"    \
-          -DCMAKE_AR=${FULL_AR}                   \
+          -DCMAKE_AR=${FULL_AR}              \
           "${_CMAKE_EXTRA_CONFIG[@]}"
 
     make -j${CPU_COUNT}
