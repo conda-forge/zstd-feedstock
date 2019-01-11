@@ -8,7 +8,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 37064928a6577c1045064523c76e11f467288b0cc877b71ee03f71d7a3dad70e
+  sha256: 293fa004dfacfbe90b42660c474920ff27093e3fb6c99f7b76e6083b21d6d48e
   patches:
     - patches/0001-Fix-VS2008-solution-format-version.patch          # [win]
     - patches/0002-Fix-order-of-building-for-VS2010.patch            # [win]
