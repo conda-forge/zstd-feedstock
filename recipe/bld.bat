@@ -28,5 +28,5 @@ if "%c_compiler%" == "vs2008" goto skip_2015
 
 :: Not working since switching from jom to vc generator.
 :: Test.
-:: ctest -C Release
-::  if not errorlevel 0 exit 1
+ctest -C Release
+if not errorlevel 0 exit 1
