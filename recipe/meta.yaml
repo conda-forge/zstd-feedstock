@@ -52,7 +52,6 @@ test:
     - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
 
     - if not exist %LIBRARY_INC%\{{ name }}.h exit 1              # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}.def exit 1         # [win]
     - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and vc>=14]
