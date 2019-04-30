@@ -1,5 +1,5 @@
 {% set name = "zstd" %}
-{% set version = "1.3.8" %}
+{% set version = "1.4.0" %}
 
 package:
   name: {{ name|lower }}
@@ -8,7 +8,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 293fa004dfacfbe90b42660c474920ff27093e3fb6c99f7b76e6083b21d6d48e
+  sha256: 7f323f0e0c18488748f3d9b2d4353f00e904ea2ccd0372ea04d7f77aa1156557
   patches:
     - patches/0001-Fix-VS2008-solution-format-version.patch          # [win]
     - patches/0002-Fix-order-of-building-for-VS2010.patch            # [win]
@@ -16,7 +16,7 @@ source:
     - patches/0006-Rename-VS2008-zstdlib-to-libzstd.patch            # [win]
 
 build:
-  number: 1003
+  number: 0
   skip: True  # [win and vc<14]
   run_exports:
     # pretty bad removal of symbols in every other micro release:
@@ -52,7 +52,6 @@ test:
     - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
 
     - if not exist %LIBRARY_INC%\{{ name }}.h exit 1              # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}.def exit 1         # [win]
     - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1         # [win]
     - if not exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win and vc>=14]

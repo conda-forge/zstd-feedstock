@@ -44,6 +44,5 @@ copy %OUTPUT_DIR%\zstd.exe %LIBRARY_BIN% || exit 1
 copy %OUTPUT_DIR%\libzstd.dll %LIBRARY_BIN% || exit 1
 copy %OUTPUT_DIR%\libzstd.lib %LIBRARY_LIB% || exit 1
 if exist %OUTPUT_DIR%\libzstd_static.lib copy %OUTPUT_DIR%\libzstd_static.lib %LIBRARY_LIB% || exit 1
-
-copy %SRC_DIR%\lib\dll\libzstd.def %LIBRARY_LIB% || exit 1
+if exist %SRC_DIR%\lib\dll\libzstd.def copy %SRC_DIR%\lib\dll\libzstd.def %LIBRARY_LIB% || exit 1
 copy %SRC_DIR%\lib\zstd.h %LIBRARY_INC% || exit 1
