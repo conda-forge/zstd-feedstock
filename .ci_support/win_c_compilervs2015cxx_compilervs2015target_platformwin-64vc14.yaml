@@ -1,5 +1,7 @@
 CMAKE_GENERATOR:
 - NMake Makefiles
+CONDA_BUILD_SYSROOT:
+- /opt/MacOSX10.10.sdk
 c_compiler:
 - vs2015
 channel_sources:
