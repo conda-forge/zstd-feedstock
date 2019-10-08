@@ -1,26 +1,33 @@
+From 82af86d868fed92bde927051a065754939c17602 Mon Sep 17 00:00:00 2001
+From: "Uwe L. Korn" <xhochy@users.noreply.github.com>
+Date: Tue, 8 Oct 2019 12:21:25 +0200
+Subject: [PATCH] Disable whole program optimization VS2010
+
+---
+ build/VS2010/libzstd/libzstd.vcxproj | 3 ---
+ 1 file changed, 3 deletions(-)
+
+diff --git a/build/VS2010/libzstd/libzstd.vcxproj b/build/VS2010/libzstd/libzstd.vcxproj
+index c4e828773..c24de5532 100644
 --- a/build/VS2010/libzstd/libzstd.vcxproj
 +++ b/build/VS2010/libzstd/libzstd.vcxproj
-@@ -91,13 +91,11 @@
+@@ -110,11 +110,9 @@
+   </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-     <ConfigurationType>StaticLibrary</ConfigurationType>
      <UseDebugLibraries>false</UseDebugLibraries>
 -    <WholeProgramOptimization>true</WholeProgramOptimization>
-     <CharacterSet>MultiByte</CharacterSet>
    </PropertyGroup>
    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-     <ConfigurationType>StaticLibrary</ConfigurationType>
      <UseDebugLibraries>false</UseDebugLibraries>
 -    <WholeProgramOptimization>true</WholeProgramOptimization>
-     <CharacterSet>MultiByte</CharacterSet>
    </PropertyGroup>
    <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-@@ -213,7 +211,6 @@
+   <ImportGroup Label="ExtensionSettings">
+@@ -229,7 +227,6 @@
        <EnablePREfast>false</EnablePREfast>
        <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
        <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
 -      <WholeProgramOptimization>true</WholeProgramOptimization>
        <OmitFramePointers>true</OmitFramePointers>
-       <AssemblerOutput>All</AssemblerOutput>
      </ClCompile>
-
-
+     <Link>
