@@ -1,5 +1,5 @@
 {% set name = "zstd" %}
-{% set version = "1.4.0" %}
+{% set version = "1.4.3" %}
 
 package:
   name: {{ name|lower }}
@@ -8,12 +8,7 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 7f323f0e0c18488748f3d9b2d4353f00e904ea2ccd0372ea04d7f77aa1156557
-  patches:
-    - patches/0001-Fix-VS2008-solution-format-version.patch          # [win]
-    - patches/0002-Fix-order-of-building-for-VS2010.patch            # [win]
-    - patches/0003-Disable-whole-program-optimization-VS2010.patch   # [win]
-    - patches/0006-Rename-VS2008-zstdlib-to-libzstd.patch            # [win]
+  sha256: e88ec8d420ff228610b77fba4fbf22b9f8b9d3f223a40ef59c9c075fcdad5767
 
 build:
   number: 0
@@ -29,6 +24,7 @@ requirements:
     - {{ compiler('cxx') }}
     - msinttypes  # [win and vc<14]
     - make   # [unix]
+    - ninja  # [win]
     - cmake
   host:
     - zlib
