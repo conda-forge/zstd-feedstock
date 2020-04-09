@@ -1,20 +1,18 @@
 CMAKE_GENERATOR:
 - NMake Makefiles
 c_compiler:
-- vs2015
+- vs2017
 channel_sources:
 - conda-forge,defaults
 channel_targets:
 - conda-forge main
 cxx_compiler:
-- vs2015
+- vs2017
 lz4_c:
-- 1.8.3
+- 1.9.2
 pin_run_as_build:
   lz4-c:
     max_pin: x.x.x
-  vc:
-    max_pin: x
   xz:
     max_pin: x.x
   zlib:
@@ -25,9 +23,5 @@ vc:
 - '14'
 xz:
 - '5.2'
-zip_keys:
-- - vc
-  - c_compiler
-  - cxx_compiler
 zlib:
 - '1.2'
