@@ -45,6 +45,8 @@ if [[ ${CMAKE_BUILD} == yes ]]; then
           -DCMAKE_INSTALL_LIBDIR="lib"       \
           -DCMAKE_PREFIX_PATH="${PREFIX}"    \
           -DCMAKE_AR=${FULL_AR}              \
+          -DZSTD_BUILD_STATIC=OFF            \
+          -DZSTD_PROGRAMS_LINK_SHARED=ON     \
           "${_CMAKE_EXTRA_CONFIG[@]}"
 
     make -j${CPU_COUNT}

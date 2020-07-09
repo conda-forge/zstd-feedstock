@@ -7,4 +7,3 @@ cmake -GNinja ^
 cmake --build . --target install
 copy %PREFIX%\Library\bin\zstd.dll %PREFIX%\Library\bin\libzstd.dll
 copy %PREFIX%\Library\lib\zstd.lib %PREFIX%\Library\lib\libzstd.lib
-copy %PREFIX%\Library\lib\zstd_static.lib %PREFIX%\Library\lib\libzstd_static.lib
