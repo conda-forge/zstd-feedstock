@@ -57,7 +57,7 @@ test:
 
 about:
   home: http://www.zstd.net
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_file: LICENSE
   summary: "Zstandard - Fast real-time compression algorithm"
   description: |
