@@ -5,7 +5,7 @@ Home: http://www.zstd.net
 
 Package license: BSD 3-Clause
 
-Feedstock license: BSD 3-Clause
+Feedstock license: BSD-3-Clause
 
 Summary: Zstandard - Fast real-time compression algorithm
 
