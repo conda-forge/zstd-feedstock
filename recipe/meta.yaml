@@ -13,11 +13,12 @@ source:
     - utime-aarch64.patch  # [aarch64]
 
 build:
-  number: 0
+  number: 1
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
-    - {{ pin_subpackage('zstd', max_pin='x.x.x') }}
+    #  Working smoothly since 1.4.x
+    - {{ pin_subpackage('zstd', max_pin='x.x') }}
 
 requirements:
   build:
