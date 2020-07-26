@@ -13,7 +13,7 @@ source:
     - utime-aarch64.patch  # [aarch64]
 
 build:
-  number: 1
+  number: 2
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
@@ -37,26 +37,49 @@ requirements:
     - xz
     - lz4-c
 
-test:
-  requires:
-    - pkg-config  # [unix]
+outputs:
+  - name: zstd
+    script: install.sh  # [unix]
+    test:
+      requires:
+        - pkg-config  # [unix]
 
-  commands:
-    - zstd -be -i5
+      commands:
+        - zstd -be -i5
 
-    - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
-    - test ! -f ${PREFIX}/lib/lib{{ name }}.a    # [unix]
-    - test -f ${PREFIX}/lib/lib{{ name }}.so     # [linux]
-    - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
+        - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
+        - test ! -f ${PREFIX}/lib/lib{{ name }}.a    # [unix]
+        - test -f ${PREFIX}/lib/lib{{ name }}.so     # [linux]
+        - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
 
-    - if not exist %LIBRARY_INC%\{{ name }}.h exit 1          # [win]
-    - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1     # [win]
-    - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1     # [win]
-    - if exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win]
+        - if not exist %LIBRARY_INC%\{{ name }}.h exit 1          # [win]
+        - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1     # [win]
+        - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1     # [win]
+        - if exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win]
 
-    - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
-    - test -f ${PREFIX}/lib/pkgconfig/lib{{ name }}.pc  # [unix]
-    - pkg-config --cflags lib{{ name }}  # [unix]
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
+        - test -f ${PREFIX}/lib/pkgconfig/lib{{ name }}.pc  # [unix]
+        - pkg-config --cflags lib{{ name }}  # [unix]
+
+  - name: zstd-static
+    script: install.sh  # [unix]
+    build:
+      skip: true  # [win]
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - msinttypes  # [win]
+        - make   # [unix]
+        - ninja  # [win]
+        - cmake
+      host:
+        - {{ pin_subpackage('zstd', exact=True) }}
+      run:
+        - {{ pin_subpackage('zstd', exact=True) }}
+    test:
+      commands:
+        - test -f ${PREFIX}/lib/lib{{ name }}.a    # [unix]
 
 about:
   home: http://www.zstd.net

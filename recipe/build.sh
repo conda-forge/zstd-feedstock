@@ -50,14 +50,12 @@ if [[ ${CMAKE_BUILD} == yes ]]; then
           "${_CMAKE_EXTRA_CONFIG[@]}"
 
     make -j${CPU_COUNT}
-    make install PREFIX=${PREFIX}
 
   popd
 
 else
 
   make -j${CPU_COUNT}
-  make install PREFIX=${PREFIX}
 
   exit 1
 
