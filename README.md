@@ -35,6 +35,13 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
+              <td>linux_64_target_platformlinux-64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=master">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=linux&configuration=linux_64_target_platformlinux-64" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
               <td>linux_aarch64_target_platformlinux-aarch64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=master">
@@ -49,24 +56,24 @@ Current build status
                 </a>
               </td>
             </tr><tr>
-              <td>linux_target_platformlinux-64</td>
+              <td>osx_64_target_platformosx-64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=linux&configuration=linux_target_platformlinux-64" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=osx&configuration=osx_64_target_platformosx-64" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_target_platformosx-64</td>
+              <td>osx_arm64_target_platformosx-arm64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=osx&configuration=osx_target_platformosx-64" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=osx&configuration=osx_arm64_target_platformosx-arm64" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>win_target_platformwin-64</td>
+              <td>win_64_target_platformwin-64</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=master">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=win&configuration=win_target_platformwin-64" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=master&jobName=win&configuration=win_64_target_platformwin-64" alt="variant">
                 </a>
               </td>
             </tr>
@@ -83,6 +90,7 @@ Current release info
 | Name | Downloads | Version | Platforms |
 | --- | --- | --- | --- |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-zstd-green.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/zstd.svg)](https://anaconda.org/conda-forge/zstd) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-zstd--static-green.svg)](https://anaconda.org/conda-forge/zstd-static) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/zstd-static.svg)](https://anaconda.org/conda-forge/zstd-static) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/zstd-static.svg)](https://anaconda.org/conda-forge/zstd-static) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/zstd-static.svg)](https://anaconda.org/conda-forge/zstd-static) |
 
 Installing zstd
 ===============
@@ -93,10 +101,10 @@ Installing `zstd` from the `conda-forge` channel can be achieved by adding `cond
 conda config --add channels conda-forge
 ```
 
-Once the `conda-forge` channel has been enabled, `zstd` can be installed with:
+Once the `conda-forge` channel has been enabled, `zstd, zstd-static` can be installed with:
 
 ```
-conda install zstd
+conda install zstd zstd-static
 ```
 
 It is possible to list all of the versions of `zstd` available on your platform with:
