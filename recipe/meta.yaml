@@ -1,5 +1,5 @@
 {% set name = "zstd" %}
-{% set version = "1.4.5" %}
+{% set version = "1.4.7" %}
 
 package:
   name: {{ name|lower }}
@@ -7,13 +7,13 @@ package:
 
 source:
   fn: {{ name }}-{{ version }}.tar.gz
-  url: https://github.com/facebook/{{ name }}/releases/download/v{{ version }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 98e91c7c6bf162bf90e4e70fdbc41a8188b9fa8de5ad840c401198014406ce9e
+  url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
+  sha256: 085500c8d0b9c83afbc1dc0d8b4889336ad019eba930c5d6a9c6c86c20c769c8
   patches:
     - utime-aarch64.patch  # [aarch64]
 
 build:
-  number: 2
+  number: 0
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
@@ -85,7 +85,7 @@ about:
   home: http://www.zstd.net
   license: BSD-3-Clause
   license_file: LICENSE
-  summary: "Zstandard - Fast real-time compression algorithm"
+  summary: Zstandard - Fast real-time compression algorithm
   description: |
     Zstandard is a real-time compression algorithm, providing high compression
     ratios. It offers a very wide range of compression / speed trade-off, while
