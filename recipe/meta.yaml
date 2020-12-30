@@ -9,8 +9,6 @@ source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: f176f0626cb797022fbf257c3c644d71c1c747bb74c32201f9203654da35e9fa
-  patches:
-    - utime-aarch64.patch  # [aarch64]
 
 build:
   number: 0
