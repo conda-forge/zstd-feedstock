@@ -13,7 +13,7 @@ source:
     - utime-aarch64.patch  # [aarch64]
 
 build:
-  number: 2
+  number: 3
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
