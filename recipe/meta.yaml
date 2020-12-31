@@ -11,7 +11,7 @@ source:
   sha256: f176f0626cb797022fbf257c3c644d71c1c747bb74c32201f9203654da35e9fa
 
 build:
-  number: 0
+  number: 1
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
