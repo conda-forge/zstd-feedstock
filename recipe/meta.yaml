@@ -1,5 +1,5 @@
 {% set name = "zstd" %}
-{% set version = "1.4.8" %}
+{% set version = "1.4.9" %}
 
 package:
   name: {{ name|lower }}
@@ -8,10 +8,10 @@ package:
 source:
   fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: f176f0626cb797022fbf257c3c644d71c1c747bb74c32201f9203654da35e9fa
+  sha256: acf714d98e3db7b876e5b540cbf6dee298f60eb3c0723104f6d3f065cd60d6a8
 
 build:
-  number: 1
+  number: 0
   run_exports:
     # pretty bad removal of symbols in every other micro release:
     #   https://abi-laboratory.pro/tracker/timeline/zstd/
