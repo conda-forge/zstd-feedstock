@@ -12,23 +12,6 @@ source:
 build:
   number: 0
 
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - msinttypes  # [win]
-    - make   # [unix]
-    - ninja  # [win]
-    - cmake
-  host:
-    - zlib
-    - xz
-    - lz4-c
-  run:
-    - zlib
-    - xz
-    - lz4-c
-
 outputs:
   - name: zstd
     script: install.sh  # [unix]
@@ -38,6 +21,18 @@ outputs:
         #   https://abi-laboratory.pro/tracker/timeline/zstd/
         #  Working smoothly since 1.4.x
         - {{ pin_subpackage('zstd', max_pin='x.x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - msinttypes  # [win]
+        - ninja
+        - make  # [unix]
+        - cmake-no-system
+      host:
+        - zlib
+        - xz
+        - lz4-c
     test:
       requires:
         - pkg-config  # [unix]
@@ -64,6 +59,13 @@ outputs:
     build:
       skip: true  # [win]
     requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - msinttypes  # [win]
+        - ninja
+        - make  # [unix]
+        - cmake-no-system
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
