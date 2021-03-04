@@ -6,17 +6,11 @@ package:
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: acf714d98e3db7b876e5b540cbf6dee298f60eb3c0723104f6d3f065cd60d6a8
 
 build:
   number: 0
-  run_exports:
-    # pretty bad removal of symbols in every other micro release:
-    #   https://abi-laboratory.pro/tracker/timeline/zstd/
-    #  Working smoothly since 1.4.x
-    - {{ pin_subpackage('zstd', max_pin='x.x') }}
 
 requirements:
   build:
@@ -38,6 +32,12 @@ requirements:
 outputs:
   - name: zstd
     script: install.sh  # [unix]
+    build:
+      run_exports:
+        # pretty bad removal of symbols in every other micro release:
+        #   https://abi-laboratory.pro/tracker/timeline/zstd/
+        #  Working smoothly since 1.4.x
+        - {{ pin_subpackage('zstd', max_pin='x.x') }}
     test:
       requires:
         - pkg-config  # [unix]
@@ -64,13 +64,6 @@ outputs:
     build:
       skip: true  # [win]
     requirements:
-      build:
-        - {{ compiler('c') }}
-        - {{ compiler('cxx') }}
-        - msinttypes  # [win]
-        - make   # [unix]
-        - ninja  # [win]
-        - cmake
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
