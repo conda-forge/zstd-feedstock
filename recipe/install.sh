@@ -24,20 +24,17 @@ fi
 pushd build/cmake
 
   FULL_AR=`which ${AR}`
-  cmake -GNinja             \
+  cmake -GNinja                            \
         -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
         -DCMAKE_INSTALL_LIBDIR="lib"       \
         -DCMAKE_PREFIX_PATH="${PREFIX}"    \
         -DCMAKE_AR=${FULL_AR}              \
-        -DZSTD_BUILD_STATIC=OFF            \
+        -DZSTD_BUILD_STATIC=ON             \
         -DZSTD_PROGRAMS_LINK_SHARED=ON     \
         "${_CMAKE_EXTRA_CONFIG[@]}"
 
-  ninja
+  ninja install
 popd
-
-
-ninja install
 
 if [[ "$PKG_NAME" == *static ]]
 then
