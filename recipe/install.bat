@@ -1,3 +1,4 @@
+@echo on
 pushd "%SRC_DIR%"\build\cmake
 cmake -GNinja ^
     -DCMAKE_BUILD_TYPE=Release ^

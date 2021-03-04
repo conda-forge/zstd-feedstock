@@ -14,7 +14,8 @@ build:
 
 outputs:
   - name: zstd
-    script: install.sh  # [unix]
+    script: install.sh   # [unix]
+    script: install.bat  # [win]
     build:
       run_exports:
         # pretty bad removal of symbols in every other micro release:
