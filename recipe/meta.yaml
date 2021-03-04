@@ -1,43 +1,40 @@
 {% set name = "zstd" %}
-{% set version = "1.4.8" %}
+{% set version = "1.4.9" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
-  fn: {{ name }}-{{ version }}.tar.gz
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: f176f0626cb797022fbf257c3c644d71c1c747bb74c32201f9203654da35e9fa
+  sha256: acf714d98e3db7b876e5b540cbf6dee298f60eb3c0723104f6d3f065cd60d6a8
 
 build:
-  number: 1
-  run_exports:
-    # pretty bad removal of symbols in every other micro release:
-    #   https://abi-laboratory.pro/tracker/timeline/zstd/
-    #  Working smoothly since 1.4.x
-    - {{ pin_subpackage('zstd', max_pin='x.x') }}
-
-requirements:
-  build:
-    - {{ compiler('c') }}
-    - {{ compiler('cxx') }}
-    - msinttypes  # [win]
-    - make   # [unix]
-    - ninja  # [win]
-    - cmake
-  host:
-    - zlib
-    - xz
-    - lz4-c
-  run:
-    - zlib
-    - xz
-    - lz4-c
+  number: 0
 
 outputs:
   - name: zstd
-    script: install.sh  # [unix]
+    script: install.sh   # [unix]
+    script: install.bat  # [win]
+    build:
+      run_exports:
+        # pretty bad removal of symbols in every other micro release:
+        #   https://abi-laboratory.pro/tracker/timeline/zstd/
+        #  Working smoothly since 1.4.x
+        - {{ pin_subpackage('zstd', max_pin='x.x') }}
+    requirements:
+      build:
+        - {{ compiler('c') }}
+        - {{ compiler('cxx') }}
+        - msinttypes  # [win]
+        - ninja
+        - make  # [unix]
+        - cmake-no-system  # [unix]
+        - cmake  # [win]
+      host:
+        - zlib
+        - xz
+        - lz4-c
     test:
       requires:
         - pkg-config  # [unix]
@@ -68,9 +65,9 @@ outputs:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - msinttypes  # [win]
-        - make   # [unix]
-        - ninja  # [win]
-        - cmake
+        - ninja
+        - make  # [unix]
+        - cmake-no-system
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
@@ -95,6 +92,7 @@ about:
   dev_url: https://github.com/facebook/zstd
 
 extra:
+  feedstock-name: zstd
   recipe-maintainers:
     - rmax
     - msarahan
