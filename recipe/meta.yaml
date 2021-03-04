@@ -2,7 +2,7 @@
 {% set version = "1.4.9" %}
 
 package:
-  name: {{ name|lower }}
+  name: {{ name|lower }}-split
   version: {{ version }}
 
 source:
@@ -95,6 +95,7 @@ about:
   dev_url: https://github.com/facebook/zstd
 
 extra:
+  feedstock-name: zstd
   recipe-maintainers:
     - rmax
     - msarahan
