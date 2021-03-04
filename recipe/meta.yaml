@@ -28,7 +28,8 @@ outputs:
         - msinttypes  # [win]
         - ninja
         - make  # [unix]
-        - cmake-no-system
+        - cmake-no-system  # [unix]
+        - cmake  # [win]
       host:
         - zlib
         - xz
