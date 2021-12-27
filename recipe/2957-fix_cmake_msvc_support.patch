@@ -1,0 +1,20 @@
+ build/cmake/lib/CMakeLists.txt | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/build/cmake/lib/CMakeLists.txt b/build/cmake/lib/CMakeLists.txt
+index ec8480d5..612f667f 100644
+--- a/build/cmake/lib/CMakeLists.txt
++++ b/build/cmake/lib/CMakeLists.txt
+@@ -22,7 +22,11 @@ include_directories(${LIBRARY_DIR} ${LIBRARY_DIR}/common)
+ 
+ file(GLOB CommonSources ${LIBRARY_DIR}/common/*.c)
+ file(GLOB CompressSources ${LIBRARY_DIR}/compress/*.c)
+-file(GLOB DecompressSources ${LIBRARY_DIR}/decompress/*.c ${LIBRARY_DIR}/decompress/*.S)
++if (MSVC)
++    file(GLOB DecompressSources ${LIBRARY_DIR}/decompress/*.c)
++else ()
++    file(GLOB DecompressSources ${LIBRARY_DIR}/decompress/*.c ${LIBRARY_DIR}/decompress/*.S)
++endif ()
+ file(GLOB DictBuilderSources ${LIBRARY_DIR}/dictBuilder/*.c)
+ 
+ set(Sources

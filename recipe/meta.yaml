@@ -1,5 +1,5 @@
 {% set name = "zstd" %}
-{% set version = "1.5.0" %}
+{% set version = "1.5.1" %}
 
 package:
   name: {{ name|lower }}-split
@@ -7,7 +7,10 @@ package:
 
 source:
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
-  sha256: 0d9ade222c64e912d6957b11c923e214e2e010a18f39bec102f572e693ba2867
+  sha256: dc05773342b28f11658604381afd22cb0a13e8ba17ff2bd7516df377060c18dd
+  patches:
+    # https://github.com/facebook/zstd/pull/2957
+    - 2957-fix_cmake_msvc_support.patch
 
 build:
   number: 0
