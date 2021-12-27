@@ -9,8 +9,9 @@ source:
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: dc05773342b28f11658604381afd22cb0a13e8ba17ff2bd7516df377060c18dd
   patches:
-    - 2951_fix_meson-msvc_support.patch
-    - fix_cmake_msvc_support.patch
+    # - 2951_fix_meson-msvc_support.patch
+    # https://github.com/facebook/zstd/pull/2957
+    - 2957-fix_cmake_msvc_support.patch
 
 build:
   number: 0
