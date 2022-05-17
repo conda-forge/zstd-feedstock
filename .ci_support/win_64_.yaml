@@ -9,8 +9,6 @@ cxx_compiler:
 lz4_c:
 - 1.9.3
 pin_run_as_build:
-  lz4-c:
-    max_pin: x.x.x
   xz:
     max_pin: x.x
   zlib:
