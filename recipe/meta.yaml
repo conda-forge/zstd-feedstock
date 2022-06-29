@@ -8,9 +8,11 @@ package:
 source:
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e
+  patches:
+    - windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   - name: zstd
@@ -37,7 +39,7 @@ outputs:
         - lz4-c
     test:
       requires:
-        - pkg-config  # [unix]
+        - pkg-config
 
       commands:
         - zstd -be -i5
@@ -53,8 +55,10 @@ outputs:
         - if exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win]
 
         - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
+        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"  # [win]
         - test -f ${PREFIX}/lib/pkgconfig/lib{{ name }}.pc  # [unix]
-        - pkg-config --cflags lib{{ name }}  # [unix]
+        - if not exist %LIBRARY_LIB%\pkgconfig\lib{{ name }}.pc exit 1  # [win]
+        - pkg-config --cflags lib{{ name }}
 
   - name: zstd-static
     script: install.sh  # [unix]
