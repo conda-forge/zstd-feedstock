@@ -8,9 +8,11 @@ package:
 source:
   url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
   sha256: f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e
+  patches:
+    - windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 1
+  number: 2
 
 outputs:
   - name: zstd
