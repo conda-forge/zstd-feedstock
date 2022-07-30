@@ -215,6 +215,3 @@ Feedstock Maintainers
 * [@rmax](https://github.com/rmax/)
 * [@xhochy](https://github.com/xhochy/)
 
-
-<!-- dummy commit to enable rerendering -->
-
