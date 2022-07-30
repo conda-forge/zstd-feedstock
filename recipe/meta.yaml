@@ -11,7 +11,7 @@ source:
     - windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   - name: zstd
@@ -58,6 +58,8 @@ outputs:
         - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc              # [unix]
         - if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1  # [win]
         - pkg-config --cflags libzstd
+        - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
+        - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
 
   - name: zstd-static
     script: install.sh  # [unix]
@@ -78,6 +80,8 @@ outputs:
     test:
       commands:
         - test -f ${PREFIX}/lib/libzstd.a    # [unix]
+        - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
+        - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
 
 about:
   home: http://www.zstd.net
