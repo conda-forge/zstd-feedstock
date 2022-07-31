@@ -38,6 +38,7 @@ outputs:
         - lz4-c
     test:
       requires:
+        - cmake
         - pkg-config
       commands:
         # shared libraries
@@ -65,8 +66,9 @@ outputs:
         - pkg-config --cflags libzstd
 
         # cmake
-        - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
-        - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
@@ -86,6 +88,7 @@ outputs:
         - zstd <0.0a0
     test:
       requires:
+        - cmake
         - pkg-config
       commands:
         # shared libraries
@@ -107,8 +110,8 @@ outputs:
         - pkg-config --cflags libzstd
 
         # cmake
-        - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
-        - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
 
 about:
   home: http://www.zstd.net
