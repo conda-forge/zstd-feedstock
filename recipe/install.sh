@@ -23,7 +23,8 @@ fi
 
 if [[ "$PKG_NAME" == *static ]]; then
   ZSTD_BUILD_STATIC=ON
-  ZSTD_BUILD_SHARED=OFF
+  # cannot build CLI without shared lib
+  ZSTD_BUILD_SHARED=ON
 else
   ZSTD_BUILD_STATIC=OFF
   ZSTD_BUILD_SHARED=ON
