@@ -39,25 +39,32 @@ outputs:
     test:
       requires:
         - pkg-config
-
       commands:
-        - zstd -be -i5
-
-        - test -f ${PREFIX}/include/zstd.h     # [unix]
-        - test ! -f ${PREFIX}/lib/libzstd.a    # [unix]
-        - test -f ${PREFIX}/lib/libzstd.so     # [linux]
-        - test -f ${PREFIX}/lib/libzstd.dylib  # [osx]
-
-        - if not exist %LIBRARY_INC%\zstd.h exit 1          # [win]
+        # shared libraries
+        - test -f ${PREFIX}/lib/libzstd.so                  # [linux]
+        - test -f ${PREFIX}/lib/libzstd.dylib               # [osx]
         - if not exist %LIBRARY_BIN%\libzstd.dll exit 1     # [win]
         - if not exist %LIBRARY_LIB%\libzstd.lib exit 1     # [win]
+
+        # absence of static libraries
+        - test ! -f ${PREFIX}/lib/libzstd.a                 # [unix]
         - if exist %LIBRARY_LIB%\libzstd_static.lib exit 1  # [win]
 
-        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
-        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"  # [win]
+        # headers
+        - test -f ${PREFIX}/include/zstd.h                  # [unix]
+        - if not exist %LIBRARY_INC%\zstd.h exit 1          # [win]
+
+        # CLI
+        - zstd -be -i5
+
+        # pkgconfig
         - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc              # [unix]
         - if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1  # [win]
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig            # [unix]
+        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"           # [win]
         - pkg-config --cflags libzstd
+
+        # cmake
         - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
         - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
 
@@ -74,8 +81,28 @@ outputs:
         - make  # [unix]
         - cmake-no-system
     test:
+      requires:
+        - pkg-config
       commands:
-        - test -f ${PREFIX}/lib/libzstd.a    # [unix]
+        # absence of share libraries
+        - test ! -f ${PREFIX}/lib/libzstd.so     # [linux]
+        - test ! -f ${PREFIX}/lib/libzstd.dylib  # [osx]
+
+        # static libraries
+        - test -f ${PREFIX}/lib/libzstd.a
+
+        # headers
+        - test -f ${PREFIX}/include/zstd.h
+
+        # CLI
+        - zstd -be -i5
+
+        # pkgconfig
+        - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
+        - pkg-config --cflags libzstd
+
+        # cmake
         - cat ${PREFIX}/lib/cmake/zstd/zstdTargets.cmake  # [unix]
         - cat ${PREFIX}/lib/cmake/zstd/zstdConfig.cmake   # [unix]
 
