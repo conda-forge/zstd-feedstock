@@ -73,10 +73,6 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
-      host:
-        - {{ pin_subpackage('zstd', exact=True) }}
-      run:
-        - {{ pin_subpackage('zstd', exact=True) }}
     test:
       commands:
         - test -f ${PREFIX}/lib/libzstd.a    # [unix]
