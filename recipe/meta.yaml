@@ -44,6 +44,9 @@ outputs:
         # shared libraries
         - test -f ${PREFIX}/lib/libzstd.so                  # [linux]
         - test -f ${PREFIX}/lib/libzstd.dylib               # [osx]
+        - if not exist %LIBRARY_BIN%\zstd.dll exit 1        # [win]
+        - if not exist %LIBRARY_LIB%\zstd.lib exit 1        # [win]
+        # duplicated for packages depending on lib-prefixed files
         - if not exist %LIBRARY_BIN%\libzstd.dll exit 1     # [win]
         - if not exist %LIBRARY_LIB%\libzstd.lib exit 1     # [win]
 
