@@ -6,7 +6,9 @@ cmake -GNinja ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
     -DCMAKE_INSTALL_LIBDIR="lib" ^
     -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
-    -DZSTD_BUILD_SHARED=ON
+    -DZSTD_BUILD_SHARED=ON ^
+    -DZSTD_BUILD_STATIC=OFF ^
+    .
 if %ERRORLEVEL% neq 0 exit 1
 
 cmake --build . --target install

@@ -52,6 +52,7 @@ outputs:
 
         # absence of static libraries
         - test ! -f ${PREFIX}/lib/libzstd.a                 # [unix]
+        - if exist %LIBRARY_LIB%\zstd_static.lib exit 1     # [win]
         - if exist %LIBRARY_LIB%\libzstd_static.lib exit 1  # [win]
 
         # headers
