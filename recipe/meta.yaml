@@ -72,7 +72,9 @@ outputs:
         # cmake
         - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
         - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
+        # disabled because compiler detection fails, see
+        # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
+        # - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
