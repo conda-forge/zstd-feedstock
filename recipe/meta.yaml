@@ -1,18 +1,17 @@
-{% set name = "zstd" %}
 {% set version = "1.5.2" %}
 
 package:
-  name: {{ name|lower }}-split
+  name: zstd-split
   version: {{ version }}
 
 source:
-  url: https://github.com/facebook/{{ name }}/archive/v{{ version }}.tar.gz
+  url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
   sha256: f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e
   patches:
     - windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   - name: zstd
@@ -39,26 +38,43 @@ outputs:
         - lz4-c
     test:
       requires:
+        - cmake
         - pkg-config
-
       commands:
+        # shared libraries
+        - test -f ${PREFIX}/lib/libzstd.so                  # [linux]
+        - test -f ${PREFIX}/lib/libzstd.dylib               # [osx]
+        - if not exist %LIBRARY_BIN%\zstd.dll exit 1        # [win]
+        - if not exist %LIBRARY_LIB%\zstd.lib exit 1        # [win]
+        # duplicated for packages depending on lib-prefixed files
+        - if not exist %LIBRARY_BIN%\libzstd.dll exit 1     # [win]
+        - if not exist %LIBRARY_LIB%\libzstd.lib exit 1     # [win]
+
+        # absence of static libraries
+        - test ! -f ${PREFIX}/lib/libzstd.a                 # [unix]
+        - if exist %LIBRARY_LIB%\zstd_static.lib exit 1     # [win]
+        - if exist %LIBRARY_LIB%\libzstd_static.lib exit 1  # [win]
+
+        # headers
+        - test -f ${PREFIX}/include/zstd.h                  # [unix]
+        - if not exist %LIBRARY_INC%\zstd.h exit 1          # [win]
+
+        # CLI
         - zstd -be -i5
 
-        - test -f ${PREFIX}/include/{{ name }}.h     # [unix]
-        - test ! -f ${PREFIX}/lib/lib{{ name }}.a    # [unix]
-        - test -f ${PREFIX}/lib/lib{{ name }}.so     # [linux]
-        - test -f ${PREFIX}/lib/lib{{ name }}.dylib  # [osx]
+        # pkgconfig
+        - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc              # [unix]
+        - if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1  # [win]
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig            # [unix]
+        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"           # [win]
+        - pkg-config --cflags libzstd
 
-        - if not exist %LIBRARY_INC%\{{ name }}.h exit 1          # [win]
-        - if not exist %LIBRARY_BIN%\lib{{ name }}.dll exit 1     # [win]
-        - if not exist %LIBRARY_LIB%\lib{{ name }}.lib exit 1     # [win]
-        - if exist %LIBRARY_LIB%\lib{{ name }}_static.lib exit 1  # [win]
-
-        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig  # [unix]
-        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"  # [win]
-        - test -f ${PREFIX}/lib/pkgconfig/lib{{ name }}.pc  # [unix]
-        - if not exist %LIBRARY_LIB%\pkgconfig\lib{{ name }}.pc exit 1  # [win]
-        - pkg-config --cflags lib{{ name }}
+        # cmake
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
+        # disabled because compiler detection fails, see
+        # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
+        # - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
@@ -72,13 +88,36 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
-      host:
-        - {{ pin_subpackage('zstd', exact=True) }}
-      run:
-        - {{ pin_subpackage('zstd', exact=True) }}
+      run_constrained:
+        # do not co-install with shared-only lib;
+        # zstd-static contains the shared libs already anyway
+        - zstd <0.0a0
     test:
+      requires:
+        - cmake
+        - pkg-config
       commands:
-        - test -f ${PREFIX}/lib/lib{{ name }}.a    # [unix]
+        # shared libraries
+        - test -f ${PREFIX}/lib/libzstd.so     # [linux]
+        - test -f ${PREFIX}/lib/libzstd.dylib  # [osx]
+
+        # static libraries
+        - test -f ${PREFIX}/lib/libzstd.a
+
+        # headers
+        - test -f ${PREFIX}/include/zstd.h
+
+        # CLI
+        - zstd -be -i5
+
+        # pkgconfig
+        - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
+        - pkg-config --cflags libzstd
+
+        # cmake
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
 
 about:
   home: http://www.zstd.net
