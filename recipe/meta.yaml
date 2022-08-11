@@ -11,7 +11,7 @@ source:
     - windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 3
+  number: 4
 
 outputs:
   - name: zstd
@@ -88,6 +88,8 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
+      host:
+        - {{ pin_subpackage('zstd', exact=True) }}
       run_constrained:
         # do not co-install with shared-only lib;
         # zstd-static contains the shared libs already anyway
@@ -97,10 +99,6 @@ outputs:
         - cmake
         - pkg-config
       commands:
-        # shared libraries
-        - test -f ${PREFIX}/lib/libzstd.so     # [linux]
-        - test -f ${PREFIX}/lib/libzstd.dylib  # [osx]
-
         # static libraries
         - test -f ${PREFIX}/lib/libzstd.a
 
