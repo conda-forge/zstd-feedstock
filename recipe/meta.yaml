@@ -38,6 +38,9 @@ outputs:
         - lz4-c
     test:
       requires:
+        # cmake needs compiler to be able to run package detection, see
+        # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
+        - {{ compiler('c') }}  # [win]
         - cmake
         - pkg-config
       commands:
@@ -72,9 +75,7 @@ outputs:
         # cmake
         - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
         - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
-        # disabled because compiler detection fails, see
-        # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
-        # - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
+        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
