@@ -40,9 +40,11 @@ outputs:
       requires:
         # cmake needs compiler to be able to run package detection, see
         # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
-        - {{ compiler('c') }}  # [win]
+        - {{ compiler('c') }}
         - cmake
         - pkg-config
+      files:
+        - cf_test/
       commands:
         # shared libraries
         - test -f ${PREFIX}/lib/libzstd.so                  # [linux]
@@ -73,9 +75,9 @@ outputs:
         - pkg-config --cflags libzstd
 
         # cmake
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=MSVC   # [win]
+        - cd cf_test
+        - cmake $CMAKE_ARGS .   # [unix and (build_platform == target_platform)]
+        - cmake %CMAKE_ARGS% .  # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
@@ -95,8 +97,11 @@ outputs:
         - {{ pin_subpackage('zstd', exact=True) }}
     test:
       requires:
+        - {{ compiler('c') }}
         - cmake
         - pkg-config
+      files:
+        - cf_test/
       commands:
         # static libraries
         - test -f ${PREFIX}/lib/libzstd.a
@@ -113,8 +118,8 @@ outputs:
         - pkg-config --cflags libzstd
 
         # cmake
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=GNU    # [linux]
-        - cmake --find-package -DNAME=zstd -DLANGUAGE=C -DMODE=EXIST -DCOMPILER_ID=Clang  # [osx]
+        - cd cf_test
+        - cmake $CMAKE_ARGS .  # [build_platform == target_platform]
 
 about:
   home: http://www.zstd.net
