@@ -34,8 +34,8 @@ outputs:
         - cmake  # [win]
       host:
         - zlib
-        - xz
-        - lz4-c
+      run:
+        - ucrt   # [win]
     test:
       requires:
         # cmake needs compiler to be able to run package detection, see
