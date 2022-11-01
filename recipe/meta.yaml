@@ -11,7 +11,7 @@ source:
     - patches/windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 4
+  number: 5
 
 outputs:
   - name: zstd
@@ -27,7 +27,6 @@ outputs:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - msinttypes  # [win]
         - ninja
         - make  # [unix]
         - cmake-no-system  # [unix]
@@ -81,13 +80,11 @@ outputs:
 
   - name: zstd-static
     script: install.sh  # [unix]
-    build:
-      skip: true  # [win]
+    script: install.bat  # [win]
     requirements:
       build:
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
-        - msinttypes  # [win]
         - ninja
         - make  # [unix]
         - cmake-no-system
@@ -104,22 +101,27 @@ outputs:
         - cf_test/
       commands:
         # static libraries
-        - test -f ${PREFIX}/lib/libzstd.a
+        - test -f ${PREFIX}/lib/libzstd.a                   # [unix]
+        - if exist %LIBRARY_LIB%\zstd_static.lib exit 1  # [win]
 
         # headers
-        - test -f ${PREFIX}/include/zstd.h
+        - test -f ${PREFIX}/include/zstd.h                  # [unix]
+        - if not exist %LIBRARY_INC%\zstd.h exit 1          # [win]
 
         # CLI
         - zstd -be -i5
 
         # pkgconfig
-        - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc
-        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
+        - test -f ${PREFIX}/lib/pkgconfig/libzstd.pc              # [unix]
+        - if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1  # [win]
+        - export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig            # [unix]
+        - set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"           # [win]
         - pkg-config --cflags libzstd
 
         # cmake
         - cd cf_test
-        - cmake $CMAKE_ARGS .  # [build_platform == target_platform]
+        - cmake $CMAKE_ARGS .   # [build_platform == target_platform and unix]
+        - cmake %CMAKE_ARGS% .  # [win]
 
 about:
   home: http://www.zstd.net
