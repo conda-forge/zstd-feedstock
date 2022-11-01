@@ -87,7 +87,8 @@ outputs:
         - {{ compiler('cxx') }}
         - ninja
         - make  # [unix]
-        - cmake-no-system
+        - cmake-no-system  # [unix]
+        - cmake  # [win]
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
