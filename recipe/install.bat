@@ -1,9 +1,10 @@
 @echo on
 
-if %PKG_NAME% == "zstd-static" (
+if "%PKG_NAME%" == "zstd-static" (
   set ZSTD_BUILD_STATIC=ON
   REM cannot build CLI without shared lib
   set ZSTD_BUILD_SHARED=ON
+  echo "static build"
 ) else (
   set ZSTD_BUILD_STATIC=OFF
   set ZSTD_BUILD_SHARED=ON
@@ -29,3 +30,7 @@ copy %PREFIX%\Library\bin\zstd.dll %PREFIX%\Library\bin\libzstd.dll
 if %ERRORLEVEL% neq 0 exit 1
 copy %PREFIX%\Library\lib\zstd.lib %PREFIX%\Library\lib\libzstd.lib
 if %ERRORLEVEL% neq 0 exit 1
+
+if "%PKG_NAME%" == "zstd-static" (
+  copy %PREFIX%\Library\lib\zstd_static.lib %PREFIX%\Library\lib\libzstd_static.lib
+)
