@@ -1,4 +1,4 @@
-{% set version = "1.5.2" %}
+{% set version = "1.5.4" %}
 
 package:
   name: zstd-split
@@ -6,12 +6,12 @@ package:
 
 source:
   url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
-  sha256: f7de13462f7a82c29ab865820149e778cbfe01087b3a55b5332707abf9db4a6e
+  sha256: 35ad983197f8f8eb0c963877bf8be50490a0b3df54b4edeb8399ba8a8b2f60a4
   patches:
     - patches/windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 6
+  number: 0
 
 outputs:
   - name: zstd
