@@ -1,0 +1,190 @@
+From 6733eaa5cb5e2b1902ee0c4afadf6c4451ba4718 Mon Sep 17 00:00:00 2001
+From: Yonatan Komornik <yoniko@meta.com>
+Date: Fri, 10 Feb 2023 14:09:37 -0800
+Subject: [PATCH] Fixes zstd-dll build
+ (https://github.com/facebook/zstd/issues/3492): - Adds pool.o and threading.o
+ dependency to the zstd-dll target - Moves custom allocation functions into
+ header to avoid needing to add dependency on common.o - Adds test target for
+ zstd-dll - Adds github workflow for test zstd-dll
+
+---
+ .github/workflows/dev-short-tests.yml |  9 ++++++-
+ lib/common/zstd_common.c              | 35 ---------------------------
+ lib/common/zstd_internal.h            | 33 ++++++++++++++++++++++---
+ programs/Makefile                     |  2 +-
+ tests/Makefile                        |  8 ++++--
+ 5 files changed, 45 insertions(+), 42 deletions(-)
+
+diff --git a/.github/workflows/dev-short-tests.yml b/.github/workflows/dev-short-tests.yml
+index 132dbb9961..9c70dda130 100644
+--- a/.github/workflows/dev-short-tests.yml
++++ b/.github/workflows/dev-short-tests.yml
+@@ -55,6 +55,14 @@ jobs:
+       run: |
+         make c89build V=1
+ 
++  zstd-dll-test:
++    runs-on: ubuntu-latest
++    steps:
++    - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # tag=v3
++    - name: build zstd bin against a dynamic lib (debuglevel for more dependencies)
++      run: |
++        make -C lib lib-mt-release 
++        DEBUGLEVEL=2 make -C programs zstd-dll
+ 
+   gcc-7-libzstd:
+     runs-on: ubuntu-latest
+@@ -328,7 +336,6 @@ jobs:
+         make -j -C programs allVariants MOREFLAGS=-O0
+         ./tests/test-variants.sh
+ 
+-
+   qemu-consistency:
+     name: QEMU ${{ matrix.name }}
+     runs-on: ubuntu-20.04
+diff --git a/lib/common/zstd_common.c b/lib/common/zstd_common.c
+index 3208552475..3f04c22abf 100644
+--- a/lib/common/zstd_common.c
++++ b/lib/common/zstd_common.c
+@@ -14,7 +14,6 @@
+ *  Dependencies
+ ***************************************/
+ #define ZSTD_DEPS_NEED_MALLOC
+-#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
+ #include "error_private.h"
+ #include "zstd_internal.h"
+ 
+@@ -47,37 +46,3 @@ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
+ /*! ZSTD_getErrorString() :
+  *  provides error code string from enum */
+ const char* ZSTD_getErrorString(ZSTD_ErrorCode code) { return ERR_getErrorString(code); }
+-
+-
+-
+-/*=**************************************************************
+-*  Custom allocator
+-****************************************************************/
+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
+-{
+-    if (customMem.customAlloc)
+-        return customMem.customAlloc(customMem.opaque, size);
+-    return ZSTD_malloc(size);
+-}
+-
+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+-{
+-    if (customMem.customAlloc) {
+-        /* calloc implemented as malloc+memset;
+-         * not as efficient as calloc, but next best guess for custom malloc */
+-        void* const ptr = customMem.customAlloc(customMem.opaque, size);
+-        ZSTD_memset(ptr, 0, size);
+-        return ptr;
+-    }
+-    return ZSTD_calloc(1, size);
+-}
+-
+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+-{
+-    if (ptr!=NULL) {
+-        if (customMem.customFree)
+-            customMem.customFree(customMem.opaque, ptr);
+-        else
+-            ZSTD_free(ptr);
+-    }
+-}
+diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
+index 37836dc703..2557ac703b 100644
+--- a/lib/common/zstd_internal.h
++++ b/lib/common/zstd_internal.h
+@@ -24,6 +24,8 @@
+ #include "mem.h"
+ #include "debug.h"                 /* assert, DEBUGLOG, RAWLOG, g_debuglevel */
+ #include "error_private.h"
++#define ZSTD_DEPS_NEED_MALLOC
++#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
+ #define ZSTD_STATIC_LINKING_ONLY
+ #include "../zstd.h"
+ #define FSE_STATIC_LINKING_ONLY
+@@ -351,9 +353,34 @@ const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBu
+ int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
+ 
+ /* custom memory allocation functions */
+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem);
+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem);
+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem);
++MEM_STATIC void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
++{
++    if (customMem.customAlloc)
++        return customMem.customAlloc(customMem.opaque, size);
++    return ZSTD_malloc(size);
++}
++
++MEM_STATIC void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
++{
++    if (customMem.customAlloc) {
++        /* calloc implemented as malloc+memset;
++         * not as efficient as calloc, but next best guess for custom malloc */
++        void* const ptr = customMem.customAlloc(customMem.opaque, size);
++        ZSTD_memset(ptr, 0, size);
++        return ptr;
++    }
++    return ZSTD_calloc(1, size);
++}
++
++MEM_STATIC void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
++{
++    if (ptr!=NULL) {
++        if (customMem.customFree)
++            customMem.customFree(customMem.opaque, ptr);
++        else
++            ZSTD_free(ptr);
++    }
++}
+ 
+ 
+ /* ZSTD_invalidateRepCodes() :
+diff --git a/programs/Makefile b/programs/Makefile
+index fcff41dc1b..8507abef3f 100644
+--- a/programs/Makefile
++++ b/programs/Makefile
+@@ -225,7 +225,7 @@ zstd-noxz : zstd
+ .PHONY: zstd-dll
+ zstd-dll : LDFLAGS+= -L$(LIBZSTD)
+ zstd-dll : LDLIBS += -lzstd
+-zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c
++zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c pool.c threading.c
+ zstd-dll : zstd
+ 
+ 
+diff --git a/tests/Makefile b/tests/Makefile
+index 3eed19ea80..778c7d6759 100644
+--- a/tests/Makefile
++++ b/tests/Makefile
+@@ -95,7 +95,7 @@ allnothread: fullbench fuzzer paramgrill datagen decodecorpus
+ dll: fuzzer-dll zstreamtest-dll
+ 
+ .PHONY: zstd zstd32 zstd-nolegacy  # only external makefile knows how to build or update them
+-zstd zstd32 zstd-nolegacy:
++zstd zstd32 zstd-nolegacy zstd-dll:
+ 	$(MAKE) -C $(PRGDIR) $@ MOREFLAGS+="$(DEBUGFLAGS)"
+ 
+ .PHONY: libzstd
+@@ -328,13 +328,17 @@ test-all: test test32 test-decodecorpus-cli
+ test-zstd: ZSTD = $(PRGDIR)/zstd
+ test-zstd: zstd
+ 
++.PHONY: test-zstd-dll
++test-zstd-dll: ZSTD = $(PRGDIR)/zstd
++test-zstd-dll: zstd-dll
++
+ test-zstd32: ZSTD = $(PRGDIR)/zstd32
+ test-zstd32: zstd32
+ 
+ test-zstd-nolegacy: ZSTD = $(PRGDIR)/zstd-nolegacy
+ test-zstd-nolegacy: zstd-nolegacy
+ 
+-test-zstd test-zstd32 test-zstd-nolegacy: datagen
++test-zstd test-zstd32 test-zstd-nolegacy test-zstd-dll: datagen
+ 	file $(ZSTD)
+ 	EXE_PREFIX="$(QEMU_SYS)" ZSTD_BIN="$(ZSTD)" DATAGEN_BIN=./datagen ./playTests.sh $(ZSTDRTTEST)
+ 

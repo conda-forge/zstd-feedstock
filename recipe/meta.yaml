@@ -15,6 +15,8 @@ source:
     # https://github.com/conda-forge/conda-forge.github.io/issues/1436
     # By not building it, we can continue to support COS6 easily
     - no-zstd-frugal.patch
+    # https://github.com/yoniko/zstd/commit/6733eaa5cb5e2b1902ee0c4afadf6c4451ba4718
+    - fix_zstd_dll.patch
 
 build:
   number: 0
