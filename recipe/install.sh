@@ -4,9 +4,9 @@ set -exo pipefail
 
 export CFLAGS="${CFLAGS} -O3 -fPIC"
 
-# Fix undefined clock_gettime
+# Fix undefined clock_gettime for linux x86 64 which is still on COS6
 declare -a _CMAKE_EXTRA_CONFIG
-if [[ ${target_platform} =~ linux.* ]] && [[ ${CDT_NAME} == "cos6" ]]; then
+if [[ "${target_platform}" == "linux-64" ]]; then
   # I hate you so much CMake.
   LIBPTHREAD=$(find ${CONDA_BUILD_SYSROOT} -name "libpthread.so")
   _CMAKE_EXTRA_CONFIG+=(-DPTHREAD_LIBRARY=${LIBPTHREAD})
