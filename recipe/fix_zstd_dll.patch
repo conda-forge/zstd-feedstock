@@ -380,25 +380,3 @@ index d487966ccf..3f3ca57c06 100644
  #include "../common/mem.h"         /* low level memory routines */
  #define FSE_STATIC_LINKING_ONLY
 
-From 11e0e39f01cce4fb8cd69977d98165d8966dfc09 Mon Sep 17 00:00:00 2001
-From: Yonatan Komornik <yoniko@meta.com>
-Date: Fri, 10 Feb 2023 17:15:27 -0800
-Subject: [PATCH 3/3] Rename `zstd-dll-test` workdlow to `build-zstd-dll`
-
----
- .github/workflows/dev-short-tests.yml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/.github/workflows/dev-short-tests.yml b/.github/workflows/dev-short-tests.yml
-index 9c70dda130..3ae2e9daec 100644
---- a/.github/workflows/dev-short-tests.yml
-+++ b/.github/workflows/dev-short-tests.yml
-@@ -55,7 +55,7 @@ jobs:
-       run: |
-         make c89build V=1
- 
--  zstd-dll-test:
-+  build-zstd-dll:
-     runs-on: ubuntu-latest
-     steps:
-     - uses: actions/checkout@ac593985615ec2ede58e132d2e21d2b1cbd6127c # tag=v3
