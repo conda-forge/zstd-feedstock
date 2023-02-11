@@ -4,22 +4,18 @@ set -exo pipefail
 
 export CFLAGS="${CFLAGS} -O3 -fPIC"
 
-# Fix undefined clock_gettime (Is this needed? See above)
-if [[ ${target_platform} =~ linux.* ]]; then
+# Fix undefined clock_gettime
+declare -a _CMAKE_EXTRA_CONFIG
+if [[ ${target_platform} =~ linux.* ]] && [[ ${CDT_NAME} == "cos6" ]]; then
+  # I hate you so much CMake.
+  LIBPTHREAD=$(find ${CONDA_BUILD_SYSROOT} -name "libpthread.so")
+  _CMAKE_EXTRA_CONFIG+=(-DPTHREAD_LIBRARY=${LIBPTHREAD})
+  LIBRT=$(find ${CONDA_BUILD_SYSROOT} -name "librt.so")
+  _CMAKE_EXTRA_CONFIG+=(-DRT_LIBRARIES=${LIBRT})
   export LDFLAGS="${LDFLAGS} -lrt"
 fi
 
 make -j$CPU_COUNT -C contrib/pzstd all
-
-declare -a _CMAKE_EXTRA_CONFIG
-
-if [[ ${HOST} =~ .*linux.* ]]; then
-  # I hate you so much CMake.
-  LIBPTHREAD=$(find ${PREFIX} -name "libpthread.so")
-  _CMAKE_EXTRA_CONFIG+=(-DPTHREAD_LIBRARY=${LIBPTHREAD})
-  LIBRT=$(find ${PREFIX} -name "librt.so")
-  _CMAKE_EXTRA_CONFIG+=(-DRT_LIBRARIES=${LIBRT})
-fi
 
 if [[ "$PKG_NAME" == *static ]]; then
   ZSTD_BUILD_STATIC=ON
