@@ -8,13 +8,6 @@ source:
   url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
   sha256: 35ad983197f8f8eb0c963877bf8be50490a0b3df54b4edeb8399ba8a8b2f60a4
   patches:
-    # 2023/02 hmarrrfk
-    # it seems that this is just a test program that isn't installed
-    # it requires clock_gettime and we don't want to upgrade
-    # to COS7 at conda-forge yet
-    # https://github.com/conda-forge/conda-forge.github.io/issues/1436
-    # By not building it, we can continue to support COS6 easily
-    - no-zstd-frugal.patch
     # https://github.com/yoniko/zstd/commit/6733eaa5cb5e2b1902ee0c4afadf6c4451ba4718
     - fix_zstd_dll.patch
 
