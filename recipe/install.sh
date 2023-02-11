@@ -5,13 +5,7 @@ set -exo pipefail
 export CFLAGS="${CFLAGS} -O3 -fPIC"
 
 # Fix undefined clock_gettime for linux x86 64 which is still on COS6
-declare -a _CMAKE_EXTRA_CONFIG
 if [[ "${target_platform}" == "linux-64" ]]; then
-  # I hate you so much CMake.
-  LIBPTHREAD=$(find ${CONDA_BUILD_SYSROOT} -name "libpthread.so")
-  _CMAKE_EXTRA_CONFIG+=(-DPTHREAD_LIBRARY=${LIBPTHREAD})
-  LIBRT=$(find ${CONDA_BUILD_SYSROOT} -name "librt.so")
-  _CMAKE_EXTRA_CONFIG+=(-DRT_LIBRARIES=${LIBRT})
   export LDFLAGS="${LDFLAGS} -lrt"
 fi
 
@@ -35,8 +29,6 @@ pushd build/cmake
         -DCMAKE_AR=${FULL_AR}              \
         -DZSTD_BUILD_STATIC=${ZSTD_BUILD_STATIC} \
         -DZSTD_BUILD_SHARED=${ZSTD_BUILD_SHARED} \
-        -DZSTD_PROGRAMS_LINK_SHARED=ON     \
-        "${_CMAKE_EXTRA_CONFIG[@]}"
-
-  ninja install
+        -DZSTD_PROGRAMS_LINK_SHARED=ON
+  ninja -v install
 popd
