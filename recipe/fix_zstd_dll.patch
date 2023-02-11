@@ -1,184 +1,3 @@
-From 6733eaa5cb5e2b1902ee0c4afadf6c4451ba4718 Mon Sep 17 00:00:00 2001
-From: Yonatan Komornik <yoniko@meta.com>
-Date: Fri, 10 Feb 2023 14:09:37 -0800
-Subject: [PATCH 1/3] Fixes zstd-dll build
- (https://github.com/facebook/zstd/issues/3492): - Adds pool.o and threading.o
- dependency to the zstd-dll target - Moves custom allocation functions into
- header to avoid needing to add dependency on common.o - Adds test target for
- zstd-dll - Adds github workflow for test zstd-dll
-
----
- lib/common/zstd_common.c              | 35 ---------------------------
- lib/common/zstd_internal.h            | 33 ++++++++++++++++++++++---
- programs/Makefile                     |  2 +-
- tests/Makefile                        |  8 ++++--
- 5 files changed, 45 insertions(+), 42 deletions(-)
-
-diff --git a/lib/common/zstd_common.c b/lib/common/zstd_common.c
-index 3208552475..3f04c22abf 100644
---- a/lib/common/zstd_common.c
-+++ b/lib/common/zstd_common.c
-@@ -14,7 +14,6 @@
- *  Dependencies
- ***************************************/
- #define ZSTD_DEPS_NEED_MALLOC
--#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
- #include "error_private.h"
- #include "zstd_internal.h"
- 
-@@ -47,37 +46,3 @@ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
- /*! ZSTD_getErrorString() :
-  *  provides error code string from enum */
- const char* ZSTD_getErrorString(ZSTD_ErrorCode code) { return ERR_getErrorString(code); }
--
--
--
--/*=**************************************************************
--*  Custom allocator
--****************************************************************/
--void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
--{
--    if (customMem.customAlloc)
--        return customMem.customAlloc(customMem.opaque, size);
--    return ZSTD_malloc(size);
--}
--
--void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
--{
--    if (customMem.customAlloc) {
--        /* calloc implemented as malloc+memset;
--         * not as efficient as calloc, but next best guess for custom malloc */
--        void* const ptr = customMem.customAlloc(customMem.opaque, size);
--        ZSTD_memset(ptr, 0, size);
--        return ptr;
--    }
--    return ZSTD_calloc(1, size);
--}
--
--void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
--{
--    if (ptr!=NULL) {
--        if (customMem.customFree)
--            customMem.customFree(customMem.opaque, ptr);
--        else
--            ZSTD_free(ptr);
--    }
--}
-diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
-index 37836dc703..2557ac703b 100644
---- a/lib/common/zstd_internal.h
-+++ b/lib/common/zstd_internal.h
-@@ -24,6 +24,8 @@
- #include "mem.h"
- #include "debug.h"                 /* assert, DEBUGLOG, RAWLOG, g_debuglevel */
- #include "error_private.h"
-+#define ZSTD_DEPS_NEED_MALLOC
-+#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
- #define ZSTD_STATIC_LINKING_ONLY
- #include "../zstd.h"
- #define FSE_STATIC_LINKING_ONLY
-@@ -351,9 +353,34 @@ const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBu
- int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
- 
- /* custom memory allocation functions */
--void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem);
--void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem);
--void ZSTD_customFree(void* ptr, ZSTD_customMem customMem);
-+MEM_STATIC void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
-+{
-+    if (customMem.customAlloc)
-+        return customMem.customAlloc(customMem.opaque, size);
-+    return ZSTD_malloc(size);
-+}
-+
-+MEM_STATIC void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
-+{
-+    if (customMem.customAlloc) {
-+        /* calloc implemented as malloc+memset;
-+         * not as efficient as calloc, but next best guess for custom malloc */
-+        void* const ptr = customMem.customAlloc(customMem.opaque, size);
-+        ZSTD_memset(ptr, 0, size);
-+        return ptr;
-+    }
-+    return ZSTD_calloc(1, size);
-+}
-+
-+MEM_STATIC void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
-+{
-+    if (ptr!=NULL) {
-+        if (customMem.customFree)
-+            customMem.customFree(customMem.opaque, ptr);
-+        else
-+            ZSTD_free(ptr);
-+    }
-+}
- 
- 
- /* ZSTD_invalidateRepCodes() :
-diff --git a/programs/Makefile b/programs/Makefile
-index fcff41dc1b..8507abef3f 100644
---- a/programs/Makefile
-+++ b/programs/Makefile
-@@ -225,7 +225,7 @@ zstd-noxz : zstd
- .PHONY: zstd-dll
- zstd-dll : LDFLAGS+= -L$(LIBZSTD)
- zstd-dll : LDLIBS += -lzstd
--zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c
-+zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c pool.c threading.c
- zstd-dll : zstd
- 
- 
-diff --git a/tests/Makefile b/tests/Makefile
-index 3eed19ea80..778c7d6759 100644
---- a/tests/Makefile
-+++ b/tests/Makefile
-@@ -95,7 +95,7 @@ allnothread: fullbench fuzzer paramgrill datagen decodecorpus
- dll: fuzzer-dll zstreamtest-dll
- 
- .PHONY: zstd zstd32 zstd-nolegacy  # only external makefile knows how to build or update them
--zstd zstd32 zstd-nolegacy:
-+zstd zstd32 zstd-nolegacy zstd-dll:
- 	$(MAKE) -C $(PRGDIR) $@ MOREFLAGS+="$(DEBUGFLAGS)"
- 
- .PHONY: libzstd
-@@ -328,13 +328,17 @@ test-all: test test32 test-decodecorpus-cli
- test-zstd: ZSTD = $(PRGDIR)/zstd
- test-zstd: zstd
- 
-+.PHONY: test-zstd-dll
-+test-zstd-dll: ZSTD = $(PRGDIR)/zstd
-+test-zstd-dll: zstd-dll
-+
- test-zstd32: ZSTD = $(PRGDIR)/zstd32
- test-zstd32: zstd32
- 
- test-zstd-nolegacy: ZSTD = $(PRGDIR)/zstd-nolegacy
- test-zstd-nolegacy: zstd-nolegacy
- 
--test-zstd test-zstd32 test-zstd-nolegacy: datagen
-+test-zstd test-zstd32 test-zstd-nolegacy test-zstd-dll: datagen
- 	file $(ZSTD)
- 	EXE_PREFIX="$(QEMU_SYS)" ZSTD_BIN="$(ZSTD)" DATAGEN_BIN=./datagen ./playTests.sh $(ZSTDRTTEST)
- 
-
-From 65d628df6ba55aab53ba5d9ee00bb3d0e727d8ea Mon Sep 17 00:00:00 2001
-From: Yonatan Komornik <yoniko@meta.com>
-Date: Fri, 10 Feb 2023 16:30:12 -0800
-Subject: [PATCH 2/3] Moves allocation primitives into `allocations.h`
-
----
- contrib/linux-kernel/zstd_common_module.c |  3 --
- lib/common/allocations.h                  | 55 +++++++++++++++++++++++
- lib/common/pool.c                         |  2 +-
- lib/common/zstd_internal.h                | 32 -------------
- lib/compress/zstd_compress.c              |  1 +
- lib/compress/zstd_cwksp.h                 |  1 +
- lib/compress/zstdmt_compress.c            |  1 +
- lib/decompress/zstd_ddict.c               |  1 +
- lib/decompress/zstd_decompress.c          |  1 +
- 9 files changed, 61 insertions(+), 36 deletions(-)
- create mode 100644 lib/common/allocations.h
-
 diff --git a/contrib/linux-kernel/zstd_common_module.c b/contrib/linux-kernel/zstd_common_module.c
 index 2fead39eb7..466828e357 100644
 --- a/contrib/linux-kernel/zstd_common_module.c
@@ -269,32 +88,36 @@ index f3d9d08547..d5ca5a7808 100644
  #include "pool.h"
  
  /* ======   Compiler specifics   ====== */
-diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
-index 2557ac703b..1f942f27bf 100644
---- a/lib/common/zstd_internal.h
-+++ b/lib/common/zstd_internal.h
-@@ -24,8 +24,6 @@
- #include "mem.h"
- #include "debug.h"                 /* assert, DEBUGLOG, RAWLOG, g_debuglevel */
- #include "error_private.h"
--#define ZSTD_DEPS_NEED_MALLOC
+diff --git a/lib/common/zstd_common.c b/lib/common/zstd_common.c
+index 3208552475..3f04c22abf 100644
+--- a/lib/common/zstd_common.c
++++ b/lib/common/zstd_common.c
+@@ -14,7 +14,6 @@
+ *  Dependencies
+ ***************************************/
+ #define ZSTD_DEPS_NEED_MALLOC
 -#include "zstd_deps.h"   /* ZSTD_malloc, ZSTD_calloc, ZSTD_free, ZSTD_memset */
- #define ZSTD_STATIC_LINKING_ONLY
- #include "../zstd.h"
- #define FSE_STATIC_LINKING_ONLY
-@@ -352,36 +350,6 @@ typedef struct {
- const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
- int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
+ #include "error_private.h"
+ #include "zstd_internal.h"
  
--/* custom memory allocation functions */
--MEM_STATIC void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
+@@ -47,37 +46,3 @@ ZSTD_ErrorCode ZSTD_getErrorCode(size_t code) { return ERR_getErrorCode(code); }
+ /*! ZSTD_getErrorString() :
+  *  provides error code string from enum */
+ const char* ZSTD_getErrorString(ZSTD_ErrorCode code) { return ERR_getErrorString(code); }
+-
+-
+-
+-/*=**************************************************************
+-*  Custom allocator
+-****************************************************************/
+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem)
 -{
 -    if (customMem.customAlloc)
 -        return customMem.customAlloc(customMem.opaque, size);
 -    return ZSTD_malloc(size);
 -}
 -
--MEM_STATIC void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem)
 -{
 -    if (customMem.customAlloc) {
 -        /* calloc implemented as malloc+memset;
@@ -306,7 +129,7 @@ index 2557ac703b..1f942f27bf 100644
 -    return ZSTD_calloc(1, size);
 -}
 -
--MEM_STATIC void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem)
 -{
 -    if (ptr!=NULL) {
 -        if (customMem.customFree)
@@ -315,6 +138,18 @@ index 2557ac703b..1f942f27bf 100644
 -            ZSTD_free(ptr);
 -    }
 -}
+diff --git a/lib/common/zstd_internal.h b/lib/common/zstd_internal.h
+index 37836dc703..1f942f27bf 100644
+--- a/lib/common/zstd_internal.h
++++ b/lib/common/zstd_internal.h
+@@ -350,11 +350,6 @@ typedef struct {
+ const seqStore_t* ZSTD_getSeqStore(const ZSTD_CCtx* ctx);   /* compress & dictBuilder */
+ int ZSTD_seqToCodes(const seqStore_t* seqStorePtr);   /* compress, dictBuilder, decodeCorpus (shouldn't get its definition from here) */
+ 
+-/* custom memory allocation functions */
+-void* ZSTD_customMalloc(size_t size, ZSTD_customMem customMem);
+-void* ZSTD_customCalloc(size_t size, ZSTD_customMem customMem);
+-void ZSTD_customFree(void* ptr, ZSTD_customMem customMem);
 -
  
  /* ZSTD_invalidateRepCodes() :
@@ -379,4 +214,48 @@ index d487966ccf..3f3ca57c06 100644
  #include "../common/zstd_deps.h"   /* ZSTD_memcpy, ZSTD_memmove, ZSTD_memset */
  #include "../common/mem.h"         /* low level memory routines */
  #define FSE_STATIC_LINKING_ONLY
-
+diff --git a/programs/Makefile b/programs/Makefile
+index fcff41dc1b..8507abef3f 100644
+--- a/programs/Makefile
++++ b/programs/Makefile
+@@ -225,7 +225,7 @@ zstd-noxz : zstd
+ .PHONY: zstd-dll
+ zstd-dll : LDFLAGS+= -L$(LIBZSTD)
+ zstd-dll : LDLIBS += -lzstd
+-zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c
++zstd-dll : ZSTDLIB_LOCAL_SRC = xxhash.c pool.c threading.c
+ zstd-dll : zstd
+ 
+ 
+diff --git a/tests/Makefile b/tests/Makefile
+index 3eed19ea80..778c7d6759 100644
+--- a/tests/Makefile
++++ b/tests/Makefile
+@@ -95,7 +95,7 @@ allnothread: fullbench fuzzer paramgrill datagen decodecorpus
+ dll: fuzzer-dll zstreamtest-dll
+ 
+ .PHONY: zstd zstd32 zstd-nolegacy  # only external makefile knows how to build or update them
+-zstd zstd32 zstd-nolegacy:
++zstd zstd32 zstd-nolegacy zstd-dll:
+ 	$(MAKE) -C $(PRGDIR) $@ MOREFLAGS+="$(DEBUGFLAGS)"
+ 
+ .PHONY: libzstd
+@@ -328,13 +328,17 @@ test-all: test test32 test-decodecorpus-cli
+ test-zstd: ZSTD = $(PRGDIR)/zstd
+ test-zstd: zstd
+ 
++.PHONY: test-zstd-dll
++test-zstd-dll: ZSTD = $(PRGDIR)/zstd
++test-zstd-dll: zstd-dll
++
+ test-zstd32: ZSTD = $(PRGDIR)/zstd32
+ test-zstd32: zstd32
+ 
+ test-zstd-nolegacy: ZSTD = $(PRGDIR)/zstd-nolegacy
+ test-zstd-nolegacy: zstd-nolegacy
+ 
+-test-zstd test-zstd32 test-zstd-nolegacy: datagen
++test-zstd test-zstd32 test-zstd-nolegacy test-zstd-dll: datagen
+ 	file $(ZSTD)
+ 	EXE_PREFIX="$(QEMU_SYS)" ZSTD_BIN="$(ZSTD)" DATAGEN_BIN=./datagen ./playTests.sh $(ZSTDRTTEST)
+ 
