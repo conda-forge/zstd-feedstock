@@ -8,7 +8,7 @@ source:
   url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
   sha256: 35ad983197f8f8eb0c963877bf8be50490a0b3df54b4edeb8399ba8a8b2f60a4
   patches:
-    # https://github.com/yoniko/zstd/commit/6733eaa5cb5e2b1902ee0c4afadf6c4451ba4718
+    # https://github.com/facebook/zstd/pull/3496
     - fix_zstd_dll.patch
 
 build:
