@@ -1,11 +1,11 @@
-About zstd
-==========
+About zstd-feedstock
+====================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/zstd-feedstock/blob/main/LICENSE.txt)
 
 Home: http://www.zstd.net
 
 Package license: BSD-3-Clause
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/zstd-feedstock/blob/main/LICENSE.txt)
 
 Summary: Zstandard - Fast real-time compression algorithm
 
