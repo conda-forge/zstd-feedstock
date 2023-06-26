@@ -31,6 +31,7 @@ outputs:
         - make  # [unix]
         - cmake-no-system  # [unix]
         - cmake  # [win]
+        - sysroot_linux-64 2.17  # [linux64]
       host:
         - zlib
       run:
@@ -89,6 +90,7 @@ outputs:
         - make  # [unix]
         - cmake-no-system  # [unix]
         - cmake  # [win]
+        - sysroot_linux-64 2.17  # [linux64]
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
