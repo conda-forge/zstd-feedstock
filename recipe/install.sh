@@ -4,9 +4,9 @@ set -exo pipefail
 
 export CFLAGS="${CFLAGS} -O3 -fPIC"
 
-# Fix undefined clock_gettime (Is this needed? See above)
+# Fix undefined clock_gettime
 if [[ ${target_platform} =~ linux.* ]]; then
-  export LDFLAGS="${LDFLAGS} -lrt"
+  find build/cmake -type f -print0 | xargs -0 sed -i 's/THREADS_LIBS}/THREADS_LIBS} -lrt/g'
 fi
 
 make -j$CPU_COUNT -C contrib/pzstd all
