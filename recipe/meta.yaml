@@ -38,8 +38,6 @@ outputs:
         - cmake  # [win]
       host:
         - zlib
-      run:
-        - ucrt   # [win]
     test:
       requires:
         # cmake needs compiler to be able to run package detection, see
