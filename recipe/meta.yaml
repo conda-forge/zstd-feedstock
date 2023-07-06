@@ -11,7 +11,7 @@ source:
     - patches/windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 6
+  number: 7
 
 outputs:
   - name: zstd
