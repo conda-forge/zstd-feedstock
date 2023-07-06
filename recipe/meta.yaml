@@ -13,6 +13,11 @@ source:
 build:
   number: 7
 
+requirements:
+  build:
+    # workaround for https://github.com/conda/conda-build/pull/4867
+    - {{ compiler('c') }}
+
 outputs:
   - name: zstd
     script: install.sh  # [unix]
@@ -76,8 +81,7 @@ outputs:
         # cmake
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [unix and (build_platform == target_platform)]
-        - cmake %CMAKE_ARGS% .  # [win]
-
+        - cmake %CMAKE_ARGS% .  # [win and (build_platform == target_platform)]
   - name: zstd-static
     script: install.sh  # [unix]
     script: install.bat  # [win]
@@ -122,7 +126,7 @@ outputs:
         # cmake
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [build_platform == target_platform and unix]
-        - cmake %CMAKE_ARGS% .  # [win]
+        - cmake %CMAKE_ARGS% .  # [build_platform == target_platform and win]
 
 about:
   home: http://www.zstd.net
