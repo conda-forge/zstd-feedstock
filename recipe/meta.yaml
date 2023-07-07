@@ -11,7 +11,12 @@ source:
     - patches/windows-cmake-pkg-config.patch  # [win]
 
 build:
-  number: 6
+  number: 7
+
+requirements:
+  build:
+    # workaround for https://github.com/conda/conda-build/pull/4867
+    - {{ compiler('c') }}
 
 outputs:
   - name: zstd
@@ -33,8 +38,6 @@ outputs:
         - cmake  # [win]
       host:
         - zlib
-      run:
-        - ucrt   # [win]
     test:
       requires:
         # cmake needs compiler to be able to run package detection, see

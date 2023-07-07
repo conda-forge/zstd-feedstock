@@ -11,7 +11,7 @@ if "%PKG_NAME%" == "zstd-static" (
 )
 
 pushd "%SRC_DIR%"\build\cmake
-cmake -GNinja ^
+cmake -GNinja %CMAKE_ARGS% ^
     -DCMAKE_BUILD_TYPE=Release ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%" ^
     -DCMAKE_INSTALL_LIBDIR="lib" ^

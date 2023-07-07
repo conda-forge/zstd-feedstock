@@ -1,11 +1,11 @@
-About zstd
-==========
+About zstd-feedstock
+====================
+
+Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/zstd-feedstock/blob/main/LICENSE.txt)
 
 Home: http://www.zstd.net
 
 Package license: BSD-3-Clause
-
-Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/zstd-feedstock/blob/main/LICENSE.txt)
 
 Summary: Zstandard - Fast real-time compression algorithm
 
@@ -78,6 +78,13 @@ Current build status
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
                   <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_arm64</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_arm64_" alt="variant">
                 </a>
               </td>
             </tr>
