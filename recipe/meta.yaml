@@ -79,7 +79,8 @@ outputs:
         # cmake
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [unix and (build_platform == target_platform)]
-        - cmake %CMAKE_ARGS% .  # [win and (build_platform == target_platform)]
+        - cmake %CMAKE_ARGS% .  # [win]
+
   - name: zstd-static
     script: install.sh  # [unix]
     script: install.bat  # [win]
@@ -124,7 +125,7 @@ outputs:
         # cmake
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [build_platform == target_platform and unix]
-        - cmake %CMAKE_ARGS% .  # [build_platform == target_platform and win]
+        - cmake %CMAKE_ARGS% .  # [win]
 
 about:
   home: http://www.zstd.net
