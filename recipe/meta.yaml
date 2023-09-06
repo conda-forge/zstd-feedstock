@@ -146,6 +146,7 @@ about:
 extra:
   feedstock-name: zstd
   recipe-maintainers:
+    - JohanMabille
     - rmax
     - msarahan
     - xhochy
