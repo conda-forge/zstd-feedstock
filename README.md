@@ -39,52 +39,101 @@ Current build status
         <table>
           <thead><tr><th>Variant</th><th>Status</th></tr></thead>
           <tbody><tr>
-              <td>linux_64</td>
+              <td>linux_64_zlib1.2</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_zlib1.2" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_aarch64</td>
+              <td>linux_64_zlib1.3</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_64_zlib1.3" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>linux_ppc64le</td>
+              <td>linux_aarch64_zlib1.2</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_zlib1.2" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_64</td>
+              <td>linux_aarch64_zlib1.3</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_aarch64_zlib1.3" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>osx_arm64</td>
+              <td>linux_ppc64le_zlib1.2</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_zlib1.2" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>win_64</td>
+              <td>linux_ppc64le_zlib1.3</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=linux&configuration=linux%20linux_ppc64le_zlib1.3" alt="variant">
                 </a>
               </td>
             </tr><tr>
-              <td>win_arm64</td>
+              <td>osx_64_zlib1.2</td>
               <td>
                 <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
-                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_arm64_" alt="variant">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_zlib1.2" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_64_zlib1.3</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_64_zlib1.3" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_zlib1.2</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_zlib1.2" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>osx_arm64_zlib1.3</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=osx&configuration=osx%20osx_arm64_zlib1.3" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_zlib1.2</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_64_zlib1.2" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_64_zlib1.3</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_64_zlib1.3" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_arm64_zlib1.2</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_arm64_zlib1.2" alt="variant">
+                </a>
+              </td>
+            </tr><tr>
+              <td>win_arm64_zlib1.3</td>
+              <td>
+                <a href="https://dev.azure.com/conda-forge/feedstock-builds/_build/latest?definitionId=2258&branchName=main">
+                  <img src="https://dev.azure.com/conda-forge/feedstock-builds/_apis/build/status/zstd-feedstock?branchName=main&jobName=win&configuration=win%20win_arm64_zlib1.3" alt="variant">
                 </a>
               </td>
             </tr>
@@ -169,7 +218,7 @@ available continuous integration services. Thanks to the awesome service provide
 [CircleCI](https://circleci.com/), [AppVeyor](https://www.appveyor.com/),
 [Drone](https://cloud.drone.io/welcome), and [TravisCI](https://travis-ci.com/)
 it is possible to build and upload installable packages to the
-[conda-forge](https://anaconda.org/conda-forge) [Anaconda-Cloud](https://anaconda.org/)
+[conda-forge](https://anaconda.org/conda-forge) [anaconda.org](https://anaconda.org/)
 channel for Linux, Windows and OSX respectively.
 
 To manage the continuous integration and simplify feedstock maintenance
@@ -217,6 +266,7 @@ In order to produce a uniquely identifiable distribution:
 Feedstock Maintainers
 =====================
 
+* [@JohanMabille](https://github.com/JohanMabille/)
 * [@hmaarrfk](https://github.com/hmaarrfk/)
 * [@msarahan](https://github.com/msarahan/)
 * [@rmax](https://github.com/rmax/)
