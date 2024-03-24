@@ -12,7 +12,7 @@ source:
     - patches/cmake_windows.patch  # [win]
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
