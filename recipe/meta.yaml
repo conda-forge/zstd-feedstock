@@ -12,7 +12,7 @@ source:
     - patches/cmake_windows.patch  # [win]
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -94,6 +94,7 @@ outputs:
         - cmake-no-system  # [unix]
         - cmake  # [win]
       host:
+        - zlib
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
         - {{ pin_subpackage('zstd', exact=True) }}
