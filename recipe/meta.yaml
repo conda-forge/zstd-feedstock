@@ -94,7 +94,6 @@ outputs:
         - cmake-no-system  # [unix]
         - cmake  # [win]
       host:
-        - zlib
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
         - {{ pin_subpackage('zstd', exact=True) }}
