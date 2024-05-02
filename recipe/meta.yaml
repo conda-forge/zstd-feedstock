@@ -28,6 +28,7 @@ outputs:
         - {{ pin_subpackage('zstd', max_pin='x.x') }}
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - ninja
