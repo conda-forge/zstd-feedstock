@@ -85,6 +85,7 @@ outputs:
     script: install.bat  # [win]
     requirements:
       build:
+        - {{ stdlib('c') }}
         - {{ compiler('c') }}
         - {{ compiler('cxx') }}
         - ninja
