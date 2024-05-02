@@ -33,8 +33,7 @@ outputs:
         - {{ compiler('cxx') }}
         - ninja
         - make  # [unix]
-        - cmake-no-system  # [unix]
-        - cmake  # [win]
+        - cmake-no-system
       host:
         - zlib
     test:
@@ -90,8 +89,7 @@ outputs:
         - {{ compiler('cxx') }}
         - ninja
         - make  # [unix]
-        - cmake-no-system  # [unix]
-        - cmake  # [win]
+        - cmake-no-system
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
