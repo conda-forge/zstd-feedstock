@@ -1,4 +1,4 @@
-{% set version = "1.5.6" %}
+{% set version = "1.5.7" %}
 
 package:
   name: zstd-split
@@ -6,9 +6,7 @@ package:
 
 source:
   url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
-  sha256: 30f35f71c1203369dc979ecde0400ffea93c27391bfd2ac5a9715d2173d92ff7
-  patches:
-    - 4019.patch
+  sha256: 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
 
 build:
   number: 0
@@ -43,7 +41,9 @@ outputs:
         # cmake needs compiler to be able to run package detection, see
         # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - cmake
+        - make  # [unix]
         - pkg-config
       files:
         - cf_test/
@@ -99,7 +99,9 @@ outputs:
     test:
       requires:
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - cmake
+        - make   # [unix]
         - pkg-config
       files:
         - cf_test/
