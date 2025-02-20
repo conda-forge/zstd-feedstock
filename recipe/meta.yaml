@@ -7,8 +7,6 @@ package:
 source:
   url: https://github.com/facebook/zstd/archive/v{{ version }}.tar.gz
   sha256: 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
-  patches:
-    - 4019.patch
 
 build:
   number: 0
