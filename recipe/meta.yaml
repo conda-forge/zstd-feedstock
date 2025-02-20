@@ -41,6 +41,7 @@ outputs:
         # cmake needs compiler to be able to run package detection, see
         # https://discourse.cmake.org/t/questions-about-find-package-cli-msvc/6194
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - cmake
         - pkg-config
       files:
@@ -97,6 +98,7 @@ outputs:
     test:
       requires:
         - {{ compiler('c') }}
+        - {{ stdlib('c') }}
         - cmake
         - pkg-config
       files:
