@@ -43,6 +43,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ stdlib('c') }}
         - cmake
+        - make  # [unix]
         - pkg-config
       files:
         - cf_test/
@@ -100,6 +101,7 @@ outputs:
         - {{ compiler('c') }}
         - {{ stdlib('c') }}
         - cmake
+        - make   # [unix]
         - pkg-config
       files:
         - cf_test/
