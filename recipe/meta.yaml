@@ -38,6 +38,7 @@ outputs:
         - zlib
       host:
         - zlib
+        - liblzma-devel
     test:
       requires:
         # cmake needs compiler to be able to run package detection, see
