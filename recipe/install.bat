@@ -4,10 +4,12 @@ if "%PKG_NAME%" == "zstd-static" (
   set ZSTD_BUILD_STATIC=ON
   REM cannot build CLI without shared lib
   set ZSTD_BUILD_SHARED=ON
+  set ZSTD_ZLIB_SUPPORT=ON
   echo "static build"
 ) else (
   set ZSTD_BUILD_STATIC=OFF
   set ZSTD_BUILD_SHARED=ON
+  set ZSTD_ZLIB_SUPPORT=OFF
 )
 
 pushd "%SRC_DIR%"\build\cmake
@@ -19,7 +21,7 @@ cmake -GNinja %CMAKE_ARGS% ^
     -DZSTD_BUILD_SHARED=%ZSTD_BUILD_SHARED% ^
     -DZSTD_BUILD_STATIC=%ZSTD_BUILD_STATIC% ^
     -DZSTD_PROGRAMS_LINK_SHARED=ON ^
-    -DZSTD_ZLIB_SUPPORT=ON ^
+    -DZSTD_ZLIB_SUPPORT=%ZSTD_ZLIB_SUPPORT% ^
     .
 if %ERRORLEVEL% neq 0 exit 1
 
