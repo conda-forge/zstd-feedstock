@@ -4,12 +4,12 @@ if "%PKG_NAME%" == "zstd-static" (
   set ZSTD_BUILD_STATIC=ON
   REM cannot build CLI without shared lib
   set ZSTD_BUILD_SHARED=ON
-  set ZSTD_ZLIB_SUPPORT=ON
+  set ZSTD_ZLIB_SUPPORT=OFF
   echo "static build"
 ) else (
   set ZSTD_BUILD_STATIC=OFF
   set ZSTD_BUILD_SHARED=ON
-  set ZSTD_ZLIB_SUPPORT=OFF
+  set ZSTD_ZLIB_SUPPORT=ON
 )
 
 pushd "%SRC_DIR%"\build\cmake
