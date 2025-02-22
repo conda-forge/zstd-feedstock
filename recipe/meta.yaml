@@ -34,6 +34,7 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
+        - zlib
       host:
         - zlib
     test:
@@ -92,6 +93,7 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
+        - zlib
       host:
         - {{ pin_subpackage('zstd', exact=True) }}
       run:
