@@ -35,7 +35,6 @@ outputs:
         - ninja
         - make  # [unix]
         - cmake-no-system
-        - zlib
       host:
         - zlib
         - liblzma-devel
