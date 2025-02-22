@@ -40,6 +40,9 @@ pushd build/cmake
         -DZSTD_BUILD_STATIC=${ZSTD_BUILD_STATIC} \
         -DZSTD_BUILD_SHARED=${ZSTD_BUILD_SHARED} \
         -DZSTD_PROGRAMS_LINK_SHARED=ON     \
+        -DZSTD_ZLIB_SUPPORT=ON             \
+        -DZSTD_LZMA_SUPPORT=ON             \
+        -DZSTD_LZ4_SUPPORT=ON              \
         "${_CMAKE_EXTRA_CONFIG[@]}"
 
   ninja install
