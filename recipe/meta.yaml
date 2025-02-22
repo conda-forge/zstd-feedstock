@@ -15,6 +15,7 @@ requirements:
   build:
     # workaround for https://github.com/conda/conda-build/pull/4867
     - {{ compiler('c') }}
+  host:
     - zlib
 
 outputs:
