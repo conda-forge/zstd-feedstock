@@ -11,11 +11,6 @@ source:
 build:
   number: 1
 
-requirements:
-  build:
-    # workaround for https://github.com/conda/conda-build/pull/4867
-    - {{ compiler('c') }}
-
 outputs:
   - name: zstd
     script: install.sh  # [unix]
