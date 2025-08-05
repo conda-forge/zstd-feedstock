@@ -9,7 +9,7 @@ source:
   sha256: 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
 
 build:
-  number: 2
+  number: 3
 
 outputs:
   - name: zstd
@@ -74,6 +74,10 @@ outputs:
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [unix and (build_platform == target_platform)]
         - cmake %CMAKE_ARGS% .  # [win]
+        - make test_zstd        # [unix and (build_platform == target_platform)]
+        - cmake --build . --target test_zstd  # [win]
+        - ./test_zstd           # [unix and (build_platform == target_platform)]
+        - test_zstd.exe         # [win]
 
   - name: zstd-static
     script: install.sh  # [unix]
@@ -122,6 +126,10 @@ outputs:
         - cd cf_test
         - cmake $CMAKE_ARGS .   # [build_platform == target_platform and unix]
         - cmake %CMAKE_ARGS% .  # [win]
+        - make test_zstd        # [build_platform == target_platform and unix]
+        - cmake --build . --target test_zstd  # [win]
+        - ./test_zstd           # [build_platform == target_platform and unix]
+        - test_zstd.exe         # [win]
 
 about:
   home: http://www.zstd.net
