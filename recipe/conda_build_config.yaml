@@ -1,4 +1,6 @@
 c_compiler:          # [osx]
   - clang_bootstrap  # [osx]
+  - gcc_bootstrap    # [linux]
 cxx_compiler:        # [osx]
   - clang_bootstrap  # [osx]
+  - gcc_bootstrap    # [linux]
