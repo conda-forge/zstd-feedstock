@@ -4,11 +4,6 @@ set -exo pipefail
 
 export CFLAGS="${CFLAGS} -O3 -fPIC"
 
-# Fix undefined clock_gettime
-if [[ ${target_platform} =~ linux.* ]]; then
-  find build/cmake -type f -print0 | xargs -0 sed -i 's/THREADS_LIBS}/THREADS_LIBS} -lrt/g'
-fi
-
 make -j$CPU_COUNT -C contrib/pzstd all
 
 declare -a _CMAKE_EXTRA_CONFIG
@@ -48,3 +43,8 @@ pushd build/cmake
 
   ninja install
 popd
+
+# Just remove all installed documentation since users of conda-forge haven't
+# asked for it.
+rm -rf ${PREFIX}/share/man/man1/unzstd*
+rm -rf ${PREFIX}/share/man/man1/zstd*
