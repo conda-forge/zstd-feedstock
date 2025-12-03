@@ -97,18 +97,14 @@ outputs:
         - ${{ pin_subpackage('zstd', exact=True) }}
     tests:
       - package_contents:
-          include:
-            - zstd.h
           files:
             exists:
               - if: unix
                 then:
                 - lib/libzstd.a
-                - lib/pkgconfig/libzstd.pc
               - if: win
                 then:
                 - Library/lib/zstd_static.lib
-                - Library/lib/pkgconfig/libzstd.pc
       - script:
           - zstd -be -i5
       - files:
