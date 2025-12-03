@@ -3,7 +3,7 @@ About zstd-feedstock
 
 Feedstock license: [BSD-3-Clause](https://github.com/conda-forge/zstd-feedstock/blob/main/LICENSE.txt)
 
-Home: http://www.zstd.net
+Home: http://www.zstd.net/
 
 Package license: BSD-3-Clause
 
@@ -19,7 +19,6 @@ being backed by a very fast decoder. It also offers a special mode for
 small data, called dictionary compression, and can create dictionaries from
 any sample set. Zstandard library is provided as open source software using
 a BSD license.
-
 
 Current build status
 ====================
