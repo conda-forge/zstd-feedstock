@@ -37,13 +37,9 @@ outputs:
       - package_contents:
           lib:
             - zstd
+            # duplicated for packages depending on lib-prefixed files
             - if: win
               then: libzstd
-          bin:
-            - if: win
-              then:
-                - zstd.dll
-                - libzstd.dll
           include:
             - zstd.h
           files:
@@ -74,8 +70,7 @@ outputs:
         script:
           - if: unix
             then: export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
-          - if: win
-            then: set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"
+            else: set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"
           - pkg-config --cflags libzstd
           - cd cf_test
           - if: unix and (build_platform == target_platform)
@@ -102,16 +97,18 @@ outputs:
         - ${{ pin_subpackage('zstd', exact=True) }}
     tests:
       - package_contents:
-          lib:
-            - zstd_static
           include:
             - zstd.h
           files:
             exists:
               - if: unix
-                then: lib/pkgconfig/libzstd.pc
+                then:
+                - lib/libzstd.a
+                - lib/pkgconfig/libzstd.pc
               - if: win
-                then: Library/lib/pkgconfig/libzstd.pc
+                then:
+                - Library/lib/zstd_static.lib
+                - Library/lib/pkgconfig/libzstd.pc
       - script:
           - zstd -be -i5
       - files:
@@ -128,8 +125,7 @@ outputs:
         script:
           - if: unix
             then: export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
-          - if: win
-            then: set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"
+            else: set "PKG_CONFIG_PATH=%LIBRARY_LIB%\pkgconfig"
           - pkg-config --cflags libzstd
           - cd cf_test
           - if: build_platform == target_platform and unix
