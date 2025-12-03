@@ -34,6 +34,33 @@ outputs:
       run_exports:
         - ${{ pin_subpackage('zstd', upper_bound='x.x') }}
     tests:
+      - package_contents:
+          lib:
+            - zstd
+            - if: win
+              then: libzstd
+          bin:
+            - if: win
+              then:
+                - zstd.dll
+                - libzstd.dll
+          include:
+            - zstd.h
+          files:
+            exists:
+              - if: unix
+                then: lib/pkgconfig/libzstd.pc
+              - if: win
+                then: Library/lib/pkgconfig/libzstd.pc
+            not_exists:
+              - if: unix
+                then: lib/libzstd.a
+              - if: win
+                then:
+                  - Library/lib/zstd_static.lib
+                  - Library/lib/libzstd_static.lib
+      - script:
+          - zstd -be -i5
       - files:
           recipe:
             - cf_test/
@@ -45,33 +72,6 @@ outputs:
               then: make
             - pkg-config
         script:
-          - if: linux
-            then: test -f ${PREFIX}/lib/libzstd.so
-          - if: osx
-            then: test -f ${PREFIX}/lib/libzstd.dylib
-          - if: win
-            then: if not exist %LIBRARY_BIN%\zstd.dll exit 1
-          - if: win
-            then: if not exist %LIBRARY_LIB%\zstd.lib exit 1
-          - if: win
-            then: if not exist %LIBRARY_BIN%\libzstd.dll exit 1
-          - if: win
-            then: if not exist %LIBRARY_LIB%\libzstd.lib exit 1
-          - if: unix
-            then: test ! -f ${PREFIX}/lib/libzstd.a
-          - if: win
-            then: if exist %LIBRARY_LIB%\zstd_static.lib exit 1
-          - if: win
-            then: if exist %LIBRARY_LIB%\libzstd_static.lib exit 1
-          - if: unix
-            then: test -f ${PREFIX}/include/zstd.h
-          - if: win
-            then: if not exist %LIBRARY_INC%\zstd.h exit 1
-          - zstd -be -i5
-          - if: unix
-            then: test -f ${PREFIX}/lib/pkgconfig/libzstd.pc
-          - if: win
-            then: if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1
           - if: unix
             then: export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
           - if: win
@@ -101,6 +101,19 @@ outputs:
       run:
         - ${{ pin_subpackage('zstd', exact=True) }}
     tests:
+      - package_contents:
+          lib:
+            - zstd_static
+          include:
+            - zstd.h
+          files:
+            exists:
+              - if: unix
+                then: lib/pkgconfig/libzstd.pc
+              - if: win
+                then: Library/lib/pkgconfig/libzstd.pc
+      - script:
+          - zstd -be -i5
       - files:
           recipe:
             - cf_test/
@@ -113,19 +126,6 @@ outputs:
               then: make
             - pkg-config
         script:
-          - if: unix
-            then: test -f ${PREFIX}/lib/libzstd.a
-          - if: win
-            then: if not exist %LIBRARY_LIB%\zstd_static.lib exit 1
-          - if: unix
-            then: test -f ${PREFIX}/include/zstd.h
-          - if: win
-            then: if not exist %LIBRARY_INC%\zstd.h exit 1
-          - zstd -be -i5
-          - if: unix
-            then: test -f ${PREFIX}/lib/pkgconfig/libzstd.pc
-          - if: win
-            then: if not exist %LIBRARY_LIB%\pkgconfig\libzstd.pc exit 1
           - if: unix
             then: export PKG_CONFIG_PATH=$PREFIX/lib/pkgconfig
           - if: win
