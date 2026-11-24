@@ -65,7 +65,7 @@ outputs:
             - ${{ compiler('c') }}
             - if: unix and (build_platform == target_platform)
               then:
-                - cmake
+                - cmake-no-system
                 - make
             - pkg-config
         script:
@@ -117,7 +117,7 @@ outputs:
             - ${{ stdlib('c') }}
             - if: unix and (build_platform == target_platform)
               then:
-                - cmake
+                - cmake-no-system
                 - make
             - pkg-config
         script:
