@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: 1.5.7
+  version: "1.6.0"
 
 recipe:
   name: zstd-split
@@ -9,10 +9,10 @@ recipe:
 
 source:
   url: https://github.com/facebook/zstd/archive/v${{ version }}.tar.gz
-  sha256: 37d7284556b20954e56e1ca85b80226768902e2edabd3b649e9e72c0c9012ee3
+  sha256: 289bb207935e5b4f241239f9832e665fa6b9636c3f87f479e125371e13842b8e
 
 build:
-  number: 7
+  number: 0
 
 outputs:
   - package:
@@ -65,7 +65,7 @@ outputs:
             - ${{ compiler('c') }}
             - if: unix and (build_platform == target_platform)
               then:
-                - cmake
+                - cmake-no-system
                 - make
             - pkg-config
         script:
@@ -117,7 +117,7 @@ outputs:
             - ${{ stdlib('c') }}
             - if: unix and (build_platform == target_platform)
               then:
-                - cmake
+                - cmake-no-system
                 - make
             - pkg-config
         script:
