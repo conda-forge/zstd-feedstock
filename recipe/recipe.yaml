@@ -12,7 +12,7 @@ source:
   sha256: 289bb207935e5b4f241239f9832e665fa6b9636c3f87f479e125371e13842b8e
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -61,7 +61,7 @@ outputs:
           recipe:
             - cf_test/
         requirements:
-          run:
+          build:
             - ${{ compiler('c') }}
             - if: unix and (build_platform == target_platform)
               then:
@@ -75,9 +75,18 @@ outputs:
           - pkg-config --cflags libzstd
           - cd cf_test
           - if: unix and (build_platform == target_platform)
-            then: cmake $CMAKE_ARGS .
+            then: |
+              cmake $CMAKE_ARGS -Dzstd_ROOT="$PREFIX" .
+              cmake --build .
+              ctest --output-on-failure
           - if: win
-            then: cmake %CMAKE_ARGS% .
+            then: |
+              cmake %CMAKE_ARGS% -Dzstd_ROOT="%LIBRARY_PREFIX%" .
+              if errorlevel 1 exit 1
+              cmake --build . --config Release
+              if errorlevel 1 exit 1
+          - if: win and (build_platform == target_platform)
+            then: ctest -C Release --output-on-failure
   - package:
       name: zstd-static
     build:
@@ -112,7 +121,7 @@ outputs:
           recipe:
             - cf_test/
         requirements:
-          run:
+          build:
             - ${{ compiler('c') }}
             - ${{ stdlib('c') }}
             - if: unix and (build_platform == target_platform)
@@ -127,9 +136,18 @@ outputs:
           - pkg-config --cflags libzstd
           - cd cf_test
           - if: build_platform == target_platform and unix
-            then: cmake $CMAKE_ARGS .
+            then: |
+              cmake $CMAKE_ARGS -Dzstd_ROOT="$PREFIX" -DZSTD_TEST_STATIC=ON .
+              cmake --build .
+              ctest --output-on-failure
           - if: win
-            then: cmake %CMAKE_ARGS% .
+            then: |
+              cmake %CMAKE_ARGS% -Dzstd_ROOT="%LIBRARY_PREFIX%" -DZSTD_TEST_STATIC=ON .
+              if errorlevel 1 exit 1
+              cmake --build . --config Release
+              if errorlevel 1 exit 1
+          - if: win and (build_platform == target_platform)
+            then: ctest -C Release --output-on-failure
 
 about:
   license: BSD-3-Clause
